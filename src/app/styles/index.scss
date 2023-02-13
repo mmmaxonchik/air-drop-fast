@@ -1,0 +1,13 @@
+//импортируем все стили в корневой файл со стилями, это будет точка входа
+@import "./variables/global.scss";
+@import "reset.scss";
+
+@import "./themes/dark.scss";
+@import "./themes/light.scss";
+
+.App{
+  font: var(--font-m);
+  background: var(--bg-color);
+  color: var(--primary-color);
+  min-height: 100vh;
+}

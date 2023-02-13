@@ -1,0 +1,16 @@
+.deliveryForm{
+  .deliveryInput{
+    margin-top: 15px;
+    font-weight: 400;
+    font-size: 1rem;
+    input{
+      &:focus {
+          color: #212529;
+          background-color: #fff;
+          border-color: #999999;
+          outline: 0;
+          box-shadow: 0 0 0 0.25rem rgba(175, 175, 175, 0.25);
+    }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+.navMobile{
+  display: none;
+  .navPhoneTop {
+      .container {
+        justify-content: center !important;
+        .navBrand {
+          .brandLogo {
+            height: 40px;
+          }
+        }
+      }
+    }
+  .navPhoneBottom {
+
+    .container {
+      justify-content: center !important;
+
+      .buttonGroup {
+        .buttonNav {
+          --bs-btn-color: #373737;
+          --bs-btn-bg: rgb(248, 249, 250);
+          --bs-btn-border-color: none;
+          --bs-btn-hover-color: #373737;
+          --bs-btn-hover-bg: #cecece;
+          --bs-btn-hover-border-color: none;
+          --bs-btn-focus-shadow-rgb: 49, 132, 253;
+          --bs-btn-active-color: #373737;
+          --bs-btn-active-bg: #cecece;
+          --bs-btn-active-border-color: #f3f8ff;
+          --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+          --bs-btn-disabled-color: #373737;
+          padding: 10px 40px;
+
+        }
+      }
+
+    }
+  }
+}
+
+.navTable{
+  .navA{
+    align-items: center;
+    margin-right: 20px;
+  }
+}
+
+$phone: 425px;
+
+
+@media screen and (max-width: $phone) {
+  .navMobile{
+    display: block;
+  }
+}
+
+@media screen and (min-width: $phone) {
+  .navTable {
+    display: block;
+  }
+}
