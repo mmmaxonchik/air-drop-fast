@@ -12,7 +12,7 @@
     }
   .navPhoneBottom {
     backdrop-filter: blur(2px);
-    background-color: rgba(255, 255, 255, 0.682);
+    background-color: rgba(255, 255, 255, 0.847);
     .container {
       justify-content: center !important;
       .buttonGroup {
@@ -21,7 +21,7 @@
           --bs-btn-bg: rgba(255, 255, 255, 0);
           --bs-btn-border-color: none;
           --bs-btn-hover-color: #373737;
-          --bs-btn-hover-bg: #cecece;
+          --bs-btn-hover-bg: #dedede4a;
           --bs-btn-hover-border-color: none;
           --bs-btn-focus-shadow-rgb: 49, 132, 253;
           --bs-btn-active-color: #373737;

@@ -1,4 +1,5 @@
 import React, { createContext, useState } from "react"
+import { Card } from "react-bootstrap"
 import style from "./delivery.module.scss"
 import DeliveryInfo from "./DeliveryInfo"
 import Order from "./Order"
@@ -18,7 +19,7 @@ interface IDeliveryContext {
   setDeliveryState: React.Dispatch<React.SetStateAction<enumDeliveryState>>
 }
 
-const DeliveryContext = createContext<IDeliveryContext>({
+export const DeliveryContext = createContext<IDeliveryContext>({
   deliveryState: enumDeliveryState.Order,
   setDeliveryState: () => {},
 })
@@ -27,12 +28,11 @@ function DeliveryForm() {
   const [deliveryState, setDeliveryState] = useState<enumDeliveryState>(
     enumDeliveryState.Order
   )
-  console.log(deliveryState)
   const context = { deliveryState, setDeliveryState }
   return (
     <DeliveryContext.Provider value={context}>
-      <Progress />
-      <div className={style.deliveryForm}>
+      <Card className={style.deliveryForm}>
+        <Progress />
         {deliveryState === enumDeliveryState.Order ? <Order /> : null}
         {deliveryState === enumDeliveryState.PersonalInfo ? (
           <PersonalInfo />
@@ -41,7 +41,7 @@ function DeliveryForm() {
           <DeliveryInfo />
         ) : null}
         {deliveryState === enumDeliveryState.Pay ? <Pay /> : null}
-      </div>
+      </Card>
     </DeliveryContext.Provider>
   )
 }

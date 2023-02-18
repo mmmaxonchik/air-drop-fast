@@ -1,24 +1,48 @@
-import React from "react"
+import { useContext, useEffect, useState } from "react"
 import { ProgressBar } from "react-bootstrap"
 import style from "./delivery.module.scss"
+import { DeliveryContext } from "./DeliveryForm"
 
 enum progressEnum {
-  Order = 6,
+  Order = 0,
   PersonalInfo = 35,
   DeliveryInfo = 68,
   Pay = 95,
 }
 
 function Progress() {
+  const [now, setNow] = useState<progressEnum>(progressEnum.Order)
+  const { deliveryState } = useContext(DeliveryContext)
+  useEffect(() => {
+    switch (deliveryState) {
+      case 0:
+        setNow(progressEnum.Order)
+        break
+      case 1:
+        setNow(progressEnum.PersonalInfo)
+        break
+      case 2:
+        setNow(progressEnum.DeliveryInfo)
+        break
+      case 3:
+        setNow(progressEnum.Pay)
+        break
+    }
+  }, [deliveryState])
+
   return (
     <div className={style.progressBar}>
       <div className={style.progressStatus}>
-        <p className={style.active}>Заказ</p>
-        <p>Личные данные</p>
-        <p>Доставка</p>
-        <p>Оплата</p>
+        <p className={deliveryState === 0 ? style.active : undefined}>Заказ</p>
+        <p className={deliveryState === 1 ? style.active : undefined}>
+          Личные данные
+        </p>
+        <p className={deliveryState === 2 ? style.active : undefined}>
+          Доставка
+        </p>
+        <p className={deliveryState === 3 ? style.active : undefined}>Оплата</p>
       </div>
-      <ProgressBar now={progressEnum.Order} className={style.progress} />
+      <ProgressBar now={now} className={style.progress} />
     </div>
   )
 }

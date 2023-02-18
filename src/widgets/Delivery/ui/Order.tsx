@@ -1,10 +1,11 @@
-import { useRef, useState, ChangeEvent } from "react"
+import { useRef, useState, ChangeEvent, useContext } from "react"
 import { Button, Col, FloatingLabel, Form, Row } from "react-bootstrap"
 import { Input } from "../../../shared/InputUX"
 import { SelectUX } from "../../../shared/SelectUX"
 import style from "./delivery.module.scss"
 import { setCookie } from "../../../app/cookies/setCookie"
 import { getCookie } from "../../../app/cookies/getCookie"
+import { DeliveryContext } from "./DeliveryForm"
 
 export interface IOrder {
   name: string | undefined
@@ -42,6 +43,18 @@ function Order() {
   const countRef = useRef<HTMLInputElement>(null)
   const categoryRef = useRef<HTMLSelectElement>(null)
   const marketRef = useRef<HTMLSelectElement>(null)
+  const { setDeliveryState } = useContext(DeliveryContext)
+  const nextStep = () => {
+    const cookie = getCookie("Order")
+    if (typeof cookie === "string") {
+      const cartArray: IOrder[] = JSON.parse(cookie)
+      const success = () => {
+        document.documentElement.scrollTop = 0
+        setDeliveryState(1)
+      }
+      cartArray.length > 1 ? success() : alert("Корзина пуста!")
+    }
+  }
   const clickHandler = () => {
     //Validation - Condition
     const selectCondition =
@@ -202,10 +215,12 @@ function Order() {
         errorMessage="Количество не должно превышать 100 шт."
       />
       <div className="mt-2 d-grid gap-2 mt-2">
-        <Button variant="secondary" onClick={clickHandler}>
+        <Button variant="dark" onClick={clickHandler}>
           Добавить в корзину
         </Button>
-        <Button variant="secondary">Продолжить</Button>
+        <Button variant="dark" onClick={() => nextStep()}>
+          Продолжить
+        </Button>
       </div>
     </div>
   )

@@ -1,9 +1,10 @@
-import { useRef, useState } from "react"
+import { useRef, useState, useContext } from "react"
 import { FloatingLabel, Form } from "react-bootstrap"
 import Button from "react-bootstrap/Button"
 import { Input } from "../../../shared/InputUX"
 import { SelectUX } from "../../../shared/SelectUX"
 import style from "./delivery.module.scss"
+import { DeliveryContext } from "./DeliveryForm"
 
 enum enumWaysToReceive {
   delivery = "delivery",
@@ -44,11 +45,21 @@ function DeliveryInfo() {
   const houseNumber = useRef<HTMLInputElement>(null)
   const postIndex = useRef<HTMLInputElement>(null)
 
+  const { setDeliveryState } = useContext(DeliveryContext)
+  const prevStep = () => {
+    setDeliveryState(1)
+    document.documentElement.scrollTop = 0
+  }
+
+  const nextStep = () => {
+    setDeliveryState(3)
+    document.documentElement.scrollTop = 0
+  }
   return (
     <div>
       <div className="d-grid gap-2 mt-2">
         <Button
-          variant="secondary"
+          variant="dark"
           onClick={() => setDeliveryMethod(enumWaysToReceive.pickup)}
         >
           Самовывоз
@@ -56,7 +67,7 @@ function DeliveryInfo() {
       </div>
       <div className="d-grid gap-2 mt-2">
         <Button
-          variant="secondary"
+          variant="dark"
           onClick={() => setDeliveryMethod(enumWaysToReceive.delivery)}
         >
           Доставка
@@ -131,6 +142,14 @@ function DeliveryInfo() {
           className="mt-2"
         />
       ) : null}
+      <div className="mt-2 d-grid gap-2 mt-2">
+        <Button variant="dark" onClick={() => nextStep()}>
+          Продолжить
+        </Button>
+        <Button variant="dark" onClick={() => prevStep()}>
+          Назад
+        </Button>
+      </div>
     </div>
   )
 }
