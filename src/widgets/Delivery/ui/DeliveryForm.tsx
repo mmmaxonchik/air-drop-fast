@@ -4,6 +4,7 @@ import DeliveryInfo from "./DeliveryInfo"
 import Order from "./Order"
 import Pay from "./Pay"
 import PersonalInfo from "./PersonalInfo"
+import Progress from "./Progress"
 
 enum enumDeliveryState {
   Order,
@@ -30,6 +31,7 @@ function DeliveryForm() {
   const context = { deliveryState, setDeliveryState }
   return (
     <DeliveryContext.Provider value={context}>
+      <Progress />
       <div className={style.deliveryForm}>
         {deliveryState === enumDeliveryState.Order ? <Order /> : null}
         {deliveryState === enumDeliveryState.PersonalInfo ? (

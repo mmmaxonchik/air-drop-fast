@@ -205,6 +205,7 @@ function Order() {
         <Button variant="secondary" onClick={clickHandler}>
           Добавить в корзину
         </Button>
+        <Button variant="secondary">Продолжить</Button>
       </div>
     </div>
   )

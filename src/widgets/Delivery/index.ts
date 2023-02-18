@@ -1,3 +1,3 @@
-import Delivery from "./ui/Delivery"
+import DeliveryForm from "./ui/DeliveryForm"
 
-export { Delivery }
+export { DeliveryForm }

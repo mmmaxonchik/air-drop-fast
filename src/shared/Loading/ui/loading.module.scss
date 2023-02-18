@@ -1,0 +1,10 @@
+.loadingPage{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .loading{
+    height: 60px;
+    width: 60px;
+  }
+}
