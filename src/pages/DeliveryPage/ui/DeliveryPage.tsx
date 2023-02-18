@@ -1,9 +1,10 @@
 import { Cart } from "../../../widgets/Cart"
 import { Delivery } from "../../../widgets/Delivery"
+import style from "./deliveryPage.module.scss"
 
 function DeliveryPage() {
   return (
-    <div>
+    <div className={style.page}>
       <Delivery />
       <Cart />
     </div>

@@ -30,12 +30,7 @@ function Navbar() {
     <>
       {nav === "mobile" ? (
         <nav className={style.navMobile}>
-          <BootNav
-            fixed="top"
-            className={style.navPhoneTop}
-            bg="light"
-            variant="light"
-          >
+          <BootNav className={style.navPhoneTop} variant="light">
             <Container className={style.container}>
               <BootNav.Brand className={style.navBrand}>
                 <img
@@ -50,7 +45,6 @@ function Navbar() {
           <BootNav
             fixed="bottom"
             className={style.navPhoneBottom}
-            bg="light"
             variant="light"
           >
             <Container className={style.container}>
@@ -60,12 +54,10 @@ function Navbar() {
                   { href: "/track", icon: Track },
                   { href: "/info", icon: Info },
                 ].map((btn, index) => (
-                  <Button
-                    key={index}
-                    href={btn.href}
-                    className={style.buttonNav}
-                  >
-                    <img alt="btnIcon" height="30" src={btn.icon}></img>
+                  <Button key={index} className={style.buttonNav}>
+                    <Link to={btn.href}>
+                      <img alt="btnIcon" height="30" src={btn.icon}></img>
+                    </Link>
                   </Button>
                 ))}
               </ButtonGroup>
@@ -75,7 +67,7 @@ function Navbar() {
       ) : null}
       {nav === "table" ? (
         <nav className={style.navTable}>
-          <BootNav bg="light" expand="lg">
+          <BootNav expand="lg">
             <Container>
               <BootNav.Brand href="/">
                 <img height="40" alt="Logo" src={Logo}></img>
