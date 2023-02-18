@@ -1,7 +1,14 @@
-import React from "react"
+import { Tab } from "../../widgets/Tab"
+
+
+const Sonnet = () => {
+  return <h1>'Hello'</h1>
+}
 
 function InfoPage() {
-  return <div>InfoPage</div>
+  return (
+   <Tab />
+  )
 }
 
 export default InfoPage

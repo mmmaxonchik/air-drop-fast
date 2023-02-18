@@ -38,14 +38,24 @@ function CardForCart({
             className={style.closeButton}
             onClick={() => deleteItem(id)}
           />
-          <Card.Title>{name}</Card.Title>
+          <Card.Title className={style.cardTitle}>{name}</Card.Title>
         </div>
-        <Card.Subtitle className="mb-2 text-muted">{`Артикул: ${article}`}</Card.Subtitle>
-        <Card.Subtitle className="mb-2 text-muted">{`Размер: ${size}`}</Card.Subtitle>
-        <Card.Subtitle className="mb-2 text-muted">{`Цена: ${price}`}</Card.Subtitle>
-        <Card.Subtitle className="mb-2 text-muted">{`Количество: ${count}`}</Card.Subtitle>
+        <Card.Subtitle
+          className={style.cardSubTitle}
+        >{`Артикул: ${article}`}</Card.Subtitle>
+        <Card.Subtitle
+          className={style.cardSubTitle}
+        >{`Размер: ${size}`}</Card.Subtitle>
+        <Card.Subtitle
+          className={style.cardSubTitle}
+        >{`Цена: ${price}`}</Card.Subtitle>
+        <Card.Subtitle
+          className={style.cardSubTitle}
+        >{`Количество: ${count}`}</Card.Subtitle>
 
-        <Card.Link href={link}>Poizon</Card.Link>
+        <Card.Link href={link} className={style.cardLink}>
+          Poizon
+        </Card.Link>
       </Card.Body>
     </Card>
   )

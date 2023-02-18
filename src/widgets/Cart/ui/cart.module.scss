@@ -14,5 +14,29 @@
         }
       }
     }
+    .cardSubTitle{
+      margin-bottom: 8px;
+    }
+  }
+}
+
+$phone: 425px;
+
+@media screen and (max-width: $phone) {
+  .cardForCart {
+    .card {
+      .header {
+        .cardTitle {
+          font-size: 15px;
+        }
+      }
+      .cardSubTitle {
+        font-size: 12px;
+        margin-bottom: 8px;
+      }
+      .cardLink{
+        font-size: 12px;
+      }
+    }
   }
 }
