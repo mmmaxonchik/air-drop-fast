@@ -1,10 +1,11 @@
-import React from "react"
-import { Delivery } from "../../widgets/Delivery"
+import { Cart } from "../../../widgets/Cart"
+import { Delivery } from "../../../widgets/Delivery"
 
 function DeliveryPage() {
   return (
     <div>
       <Delivery />
+      <Cart />
     </div>
   )
 }
