@@ -7,7 +7,7 @@ enum progressEnum {
   Order = 0,
   PersonalInfo = 35,
   DeliveryInfo = 68,
-  Pay = 95,
+  Pay = 100,
 }
 
 function Progress() {

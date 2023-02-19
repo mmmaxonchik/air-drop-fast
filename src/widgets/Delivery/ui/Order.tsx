@@ -55,7 +55,7 @@ function Order() {
       cartArray.length > 1 ? success() : alert("Корзина пуста!")
     }
   }
-  const clickHandler = () => {
+  const addToCartClick = () => {
     //Validation - Condition
     const selectCondition =
       !isNaN(Number(categoryRef.current?.value)) &&
@@ -215,7 +215,7 @@ function Order() {
         errorMessage="Количество не должно превышать 100 шт."
       />
       <div className="mt-2 d-grid gap-2 mt-2">
-        <Button variant="dark" onClick={clickHandler}>
+        <Button variant="dark" onClick={addToCartClick}>
           Добавить в корзину
         </Button>
         <Button variant="dark" onClick={() => nextStep()}>

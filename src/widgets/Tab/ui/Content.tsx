@@ -1,6 +1,7 @@
 import { Col } from "react-bootstrap"
 import Tab from "react-bootstrap/Tab"
 import Accordion from "react-bootstrap/Accordion"
+import Card from "react-bootstrap/Card"
 import style from "./tab.module.scss"
 import { InfoTabsEnum } from "./Tab"
 
@@ -59,6 +60,35 @@ const Contacts = () => {
   return (
     <div>
       <h1>Контакты</h1>
+      <Card className="mb-2">
+        <Card.Body>
+          <Card.Title>Поддержка</Card.Title>
+          <Card.Text>
+            Если у вас возникли проблемы вы всегда можете обратиться к нам в
+            Телеграм или написав нам на почту.
+          </Card.Text>
+          <Card.Link href="https://t.me/AirDrop_Support1">Telegram</Card.Link>
+          <Card.Link href="#">Gmail</Card.Link>
+        </Card.Body>
+      </Card>
+      <Card className="mb-2">
+        <Card.Body>
+          <Card.Title>Крылов Михаил</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">Менеджер</Card.Subtitle>
+          <Card.Link href="https://t.me/K_Mihael">Telegram</Card.Link>
+          <Card.Link href="https://vk.com/mkrylov1">Vk</Card.Link>
+        </Card.Body>
+      </Card>
+      <Card>
+        <Card.Body>
+          <Card.Title>Спицын Максим</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">
+            Администратор
+          </Card.Subtitle>
+          <Card.Link href="https://t.me/AirDrop_Support1">Telegram</Card.Link>
+          <Card.Link href="#">Vk</Card.Link>
+        </Card.Body>
+      </Card>
     </div>
   )
 }
@@ -95,7 +125,7 @@ const Pay = () => {
       <h1>Оплата</h1>
       <h5>Банковский перевод</h5>
       <p>
-        Мы принимаем оплату по банковскими картами систем Visa, MasterCard, МИР.
+        Мы принимаем оплату по банковским картам систем Visa, MasterCard, МИР.
       </p>
     </div>
   )
