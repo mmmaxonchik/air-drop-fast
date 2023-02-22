@@ -1,5 +1,6 @@
 import React, { createContext, useState } from "react"
 import { Card } from "react-bootstrap"
+import AddItem from "./AddItem"
 import style from "./delivery.module.scss"
 import DeliveryInfo from "./DeliveryInfo"
 import Order from "./Order"
@@ -33,7 +34,7 @@ function DeliveryForm() {
     <DeliveryContext.Provider value={context}>
       <Card className={style.deliveryForm}>
         <Progress />
-        {deliveryState === enumDeliveryState.Order ? <Order /> : null}
+        {deliveryState === enumDeliveryState.Order ? <AddItem /> : null}
         {deliveryState === enumDeliveryState.PersonalInfo ? (
           <PersonalInfo />
         ) : null}
