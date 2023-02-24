@@ -1,8 +1,13 @@
-import { useState, ChangeEvent } from "react"
+import { useState, ChangeEvent, useContext } from "react"
 import { useForm } from "react-hook-form"
 import { FloatingLabel, Form, Button, Row, Col } from "react-bootstrap"
 import { createOrderId } from "../lib/createOrderId"
 import { addToCart } from "../lib/addToCart"
+import { CartContext } from "../../Cart"
+import style from "./delivery.module.scss"
+import { getCookie } from "../../../app/cookies/getCookie"
+import { IOrder } from "../lib/orderType"
+import { DeliveryContext } from "./DeliveryForm"
 
 enum categoryState {
   None,
@@ -54,8 +59,24 @@ export default function AddItem() {
     )
   }
   //submit form = add to card
+  const { setCart } = useContext(CartContext)
   const onSubmit = (data: any) => {
-    addToCart({ ...data, id: createOrderId() })
+    const newItem = { ...data, id: createOrderId() }
+    setCart((prev) => [...prev, newItem])
+    addToCart(newItem)
+  }
+  //next step
+  const { setDeliveryState } = useContext(DeliveryContext)
+  const nextStep = () => {
+    const cookie = getCookie("Order")
+    if (typeof cookie === "string") {
+      const cartArray: IOrder[] = JSON.parse(cookie)
+      const success = () => {
+        document.documentElement.scrollTop = 0
+        setDeliveryState(1)
+      }
+      cartArray.length > 1 ? success() : alert("Корзина пуста!")
+    }
   }
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -308,7 +329,9 @@ export default function AddItem() {
         <Button variant="dark" type="submit">
           Добавить в корзину
         </Button>
-        <Button variant="dark">Продолжить</Button>
+        <Button variant="dark" onClick={() => nextStep()}>
+          Продолжить
+        </Button>
       </div>
     </Form>
   )

@@ -2,13 +2,10 @@ import React, { createContext, useState } from "react"
 import { Card } from "react-bootstrap"
 import AddItem from "./AddItem"
 import style from "./delivery.module.scss"
-import DeliveryInfo from "./DeliveryInfo"
-import Order from "./Order"
-import Pay from "./Pay"
-import PersonalInfo from "./PersonalInfo"
+import FinalForm from "./FinalForm"
 import Progress from "./Progress"
 
-enum enumDeliveryState {
+export enum enumDeliveryState {
   Order,
   PersonalInfo,
   DeliveryInfo,
@@ -35,13 +32,9 @@ function DeliveryForm() {
       <Card className={style.deliveryForm}>
         <Progress />
         {deliveryState === enumDeliveryState.Order ? <AddItem /> : null}
-        {deliveryState === enumDeliveryState.PersonalInfo ? (
-          <PersonalInfo />
+        {deliveryState !== enumDeliveryState.Order ? (
+          <FinalForm step={deliveryState} />
         ) : null}
-        {deliveryState === enumDeliveryState.DeliveryInfo ? (
-          <DeliveryInfo />
-        ) : null}
-        {deliveryState === enumDeliveryState.Pay ? <Pay /> : null}
       </Card>
     </DeliveryContext.Provider>
   )

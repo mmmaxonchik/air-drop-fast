@@ -1,59 +1,51 @@
-import React from "react"
+import { useContext } from "react"
 import { CloseButton } from "react-bootstrap"
 import Card from "react-bootstrap/Card"
-import { getCookie } from "../../../app/cookies/getCookie"
-import { setCookie } from "../../../app/cookies/setCookie"
-import { IOrder } from "../../Delivery/ui/Order"
+import { IOrder } from "../../Delivery/lib/orderType"
+import { deleteItem } from "../lib/deleteItem"
 import style from "./cart.module.scss"
-
-function deleteItem(id: number | undefined) {
-  const cookie = getCookie("Order")
-  if (typeof cookie === "string") {
-    const itemsArray: IOrder[] = JSON.parse(cookie)
-    for (let i = 0; i < itemsArray.length; i++) {
-      if (id === itemsArray[i].id) {
-        itemsArray.splice(i, 1)
-      }
-    }
-    setCookie("Order", JSON.stringify(itemsArray))
-  }
-}
+import { CartContext } from "./CartContext"
 
 function CardForCart({
-  name,
-  article,
-  link,
-  category,
-  marketplace,
-  size,
-  price,
-  count,
+  ItemName,
+  Article,
+  Link,
+  Category,
+  Marketplace,
+  Size,
+  Price,
+  Count,
   id,
 }: IOrder) {
+  const { setCart } = useContext(CartContext)
+  const deleteItemFromCart = (id: number) => {
+    setCart((prev) => prev.filter((item) => item.id !== id))
+    deleteItem(id)
+  }
   return (
     <Card className="mt-2">
       <Card.Body className={style.card}>
         <div className={style.header}>
           <CloseButton
             className={style.closeButton}
-            onClick={() => deleteItem(id)}
+            onClick={() => deleteItemFromCart(id)}
           />
-          <Card.Title className={style.cardTitle}>{name}</Card.Title>
+          <Card.Title className={style.cardTitle}>{ItemName}</Card.Title>
         </div>
         <Card.Subtitle
           className={style.cardSubTitle}
-        >{`Артикул: ${article}`}</Card.Subtitle>
+        >{`Артикул: ${Article}`}</Card.Subtitle>
         <Card.Subtitle
           className={style.cardSubTitle}
-        >{`Размер: ${size}`}</Card.Subtitle>
+        >{`Размер: ${Size}`}</Card.Subtitle>
         <Card.Subtitle
           className={style.cardSubTitle}
-        >{`Цена: ${price}`}</Card.Subtitle>
+        >{`Цена: ${Price}`}</Card.Subtitle>
         <Card.Subtitle
           className={style.cardSubTitle}
-        >{`Количество: ${count}`}</Card.Subtitle>
+        >{`Количество: ${Count}`}</Card.Subtitle>
 
-        <Card.Link href={link} className={style.cardLink}>
+        <Card.Link href={Link} className={style.cardLink}>
           Poizon
         </Card.Link>
       </Card.Body>
