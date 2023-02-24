@@ -1,7 +1,12 @@
 import React from "react"
+import { Track } from "../../widgets/Track"
 
 function TrackPage() {
-  return <div>TrackPage</div>
+  return (
+    <>
+      <Track />
+    </>
+  )
 }
 
 export default TrackPage

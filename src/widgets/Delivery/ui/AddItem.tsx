@@ -4,7 +4,6 @@ import { FloatingLabel, Form, Button, Row, Col } from "react-bootstrap"
 import { createOrderId } from "../lib/createOrderId"
 import { addToCart } from "../lib/addToCart"
 import { CartContext } from "../../Cart"
-import style from "./delivery.module.scss"
 import { getCookie } from "../../../app/cookies/getCookie"
 import { IOrder } from "../lib/orderType"
 import { DeliveryContext } from "./DeliveryForm"
@@ -178,6 +177,7 @@ export default function AddItem() {
                 <FloatingLabel label={"Размер"}>
                   <Form.Control
                     type="number"
+                    inputMode="numeric"
                     placeholder="Размер"
                     isInvalid={
                       typeof errors.Size !== "undefined" ? true : false

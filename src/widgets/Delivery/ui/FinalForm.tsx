@@ -169,6 +169,7 @@ function FinalForm({ step }: FinalFormProps) {
           <Form.Group className="mt-2">
             <FloatingLabel label={"Номер телефона"}>
               <Form.Control
+                inputMode="tel"
                 type="tel"
                 placeholder="Номер телефона"
                 isInvalid={
@@ -193,6 +194,7 @@ function FinalForm({ step }: FinalFormProps) {
           <Form.Group className="mt-2">
             <FloatingLabel label={"Почта"}>
               <Form.Control
+                inputMode="email"
                 type="email"
                 placeholder="Почта"
                 isInvalid={typeof errors.Email !== "undefined" ? true : false}
