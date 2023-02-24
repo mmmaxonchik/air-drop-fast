@@ -75,7 +75,7 @@ export default function AddItem() {
         document.documentElement.scrollTop = 0
         setDeliveryState(1)
       }
-      cartArray.length > 1 ? success() : alert("Корзина пуста!")
+      cartArray.length > 0 ? success() : alert("Корзина пуста!")
     }
   }
   return (

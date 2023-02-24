@@ -1,4 +1,4 @@
-import React, { createContext, Dispatch, SetStateAction } from "react"
+import { createContext, Dispatch, SetStateAction } from "react"
 import { IOrder } from "../../Delivery/lib/orderType"
 
 interface ICartContext {

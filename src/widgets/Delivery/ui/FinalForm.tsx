@@ -1,6 +1,8 @@
 import { ChangeEvent, useState, useContext } from "react"
 import { Form, FloatingLabel, ButtonGroup, Button } from "react-bootstrap"
 import { useForm } from "react-hook-form"
+import { getCookie } from "../../../app/cookies/getCookie"
+import { IOrder } from "../lib/orderType"
 import { DeliveryContext, enumDeliveryState } from "./DeliveryForm"
 
 interface FinalFormProps {
@@ -113,6 +115,7 @@ function FinalForm({ step }: FinalFormProps) {
       nextStep(enumDeliveryState.DeliveryInfo + 1)
     }
   }
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       {step === enumDeliveryState.PersonalInfo ? (
