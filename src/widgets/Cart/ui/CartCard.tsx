@@ -1,24 +1,39 @@
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { CloseButton } from "react-bootstrap"
 import Card from "react-bootstrap/Card"
 import { OrderCreateContext } from "../../../pages/OrderCreatePage/lib/orderCreate.context"
-import { Item } from "../../../pages/OrderCreatePage/types"
+import {
+  Category,
+  Item,
+  Marketplace,
+  Rate,
+} from "../../../pages/OrderCreatePage/types"
+import { UseQueryResult } from "react-query"
 
 import { deleteItem } from "../lib/deleteItem"
 import style from "./cart.module.scss"
+import { CartCardLoader } from "../../../shared/CartCardLoader"
+
+interface CartCardProps extends Item {
+  fetchRates: UseQueryResult<Rate[]>
+  fetchCategories: UseQueryResult<Category[]>
+  fetchMarketplaces: UseQueryResult<Marketplace[]>
+}
 
 function CartCard({
   ItemName,
   Article,
   Link,
-  CategoryId,
-  MarketplaceId,
-  RateId,
   Size,
   Price,
   Count,
   id,
-}: Item) {
+  RateId,
+  MarketplaceId,
+  fetchRates,
+  fetchCategories,
+  fetchMarketplaces,
+}: CartCardProps) {
   const { setCart } = useContext(OrderCreateContext)
   const deleteItemFromCart = (id: number | undefined) => {
     if (typeof id !== "undefined") {
@@ -26,34 +41,59 @@ function CartCard({
       deleteItem(id)
     }
   }
-  return (
-    <Card className="mt-2">
-      <Card.Body className={style.card}>
-        <div className={style.header}>
-          <CloseButton
-            className={style.closeButton}
-            onClick={() => deleteItemFromCart(id)}
-          />
-          <Card.Title className={style.cardTitle}>{ItemName}</Card.Title>
-        </div>
-        <Card.Subtitle
-          className={style.cardSubTitle}
-        >{`Артикул: ${Article}`}</Card.Subtitle>
-        <Card.Subtitle
-          className={style.cardSubTitle}
-        >{`Размер: ${Size}`}</Card.Subtitle>
-        <Card.Subtitle
-          className={style.cardSubTitle}
-        >{`Цена: ${Price}`}</Card.Subtitle>
-        <Card.Subtitle
-          className={style.cardSubTitle}
-        >{`Количество: ${Count}`}</Card.Subtitle>
+  const [rate, setRate] = useState<string>("")
+  const [marketplace, setMarketplace] = useState<string>("")
 
-        <Card.Link href={Link} className={style.cardLink}>
-          Poizon
-        </Card.Link>
-      </Card.Body>
-    </Card>
+  useEffect(() => {
+    fetchRates.data?.forEach(({ Name, Id }) => {
+      if (Number(Id) === Number(RateId)) {
+        setRate(Name)
+      }
+    })
+    fetchMarketplaces.data?.forEach(({ Name, Id }) => {
+      if (Number(Id) === Number(MarketplaceId)) {
+        setMarketplace(Name)
+      }
+    })
+  }, [fetchRates.data, fetchMarketplaces.data])
+  return (
+    <>
+      {fetchRates.isLoading &&
+      fetchCategories.isLoading &&
+      fetchMarketplaces.isLoading ? (
+        <CartCardLoader />
+      ) : (
+        <Card className="mt-2">
+          <Card.Body className={style.card}>
+            <div className={style.header}>
+              <CloseButton
+                className={style.closeButton}
+                onClick={() => deleteItemFromCart(id)}
+              />
+              <Card.Title className={style.cardTitle}>{ItemName}</Card.Title>
+            </div>
+            <Card.Subtitle
+              className={style.cardSubTitle}
+            >{`Артикул: ${Article}`}</Card.Subtitle>
+            <Card.Subtitle
+              className={style.cardSubTitle}
+            >{`Размер: ${Size}`}</Card.Subtitle>
+
+            <Card.Subtitle
+              className={style.cardSubTitle}
+            >{`Цена: ${Price}${rate}`}</Card.Subtitle>
+            <Card.Subtitle
+              className={style.cardSubTitle}
+            >{`Количество: ${Count}`}</Card.Subtitle>
+            {typeof Link !== "undefined" ? (
+              <Card.Link href={Link} className={style.cardLink}>
+                {marketplace}
+              </Card.Link>
+            ) : null}
+          </Card.Body>
+        </Card>
+      )}
+    </>
   )
 }
 

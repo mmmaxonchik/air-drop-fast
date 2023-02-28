@@ -9,19 +9,38 @@ import { OrderCreateContext } from "../../../pages/OrderCreatePage/lib/orderCrea
 import style from "./cart.module.scss"
 //Type
 import { CheckoutStatuses } from "../../../pages/OrderCreatePage/types"
+import { useQuery } from "react-query"
+import {
+  getCategories,
+  getMarketplaces,
+  getRates,
+} from "../../../pages/OrderCreatePage/api"
 
 function Cart() {
   const { cart, checkoutStatus } = useContext(OrderCreateContext)
 
+  const fetchRates = useQuery("rates", getRates)
+  const fetchCategories = useQuery("categories", getCategories)
+  const fetchMarketplaces = useQuery("marketplaces", getMarketplaces)
   return (
     <div>
       {checkoutStatus === CheckoutStatuses.Order ? (
         <>
-          <AddItem />
+          <AddItem
+            fetchRates={fetchRates}
+            fetchCategories={fetchCategories}
+            fetchMarketplaces={fetchMarketplaces}
+          />
           <Card className={style.cardForCart}>
             <Card.Title>Корзина</Card.Title>
             {cart.map((props, index) => (
-              <CartCard {...props} key={index} />
+              <CartCard
+                fetchRates={fetchRates}
+                fetchCategories={fetchCategories}
+                fetchMarketplaces={fetchMarketplaces}
+                {...props}
+                key={index}
+              />
             ))}
           </Card>
         </>

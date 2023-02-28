@@ -12,14 +12,14 @@ import { getCookie } from "../../../app/cookies/getCookie"
 //Context
 import { OrderCreateContext } from "../../../pages/OrderCreatePage/lib/orderCreate.context"
 //Type
-import { Item } from "../../../pages/OrderCreatePage/types"
-//React-Query-Api
-import { useQuery } from "react-query"
 import {
-  getCategories,
-  getMarketplaces,
-  getRates,
-} from "../../../pages/OrderCreatePage/api"
+  Category,
+  Item,
+  Marketplace,
+  Rate,
+} from "../../../pages/OrderCreatePage/types"
+//React-Query-Api
+import { UseQueryResult } from "react-query"
 
 enum sizeChartState {
   None,
@@ -40,7 +40,17 @@ interface FormInputs {
   sizeChartId: number
 }
 
-export default function AddItem() {
+interface AddItemProps {
+  fetchRates: UseQueryResult<Rate[]>
+  fetchCategories: UseQueryResult<Category[]>
+  fetchMarketplaces: UseQueryResult<Marketplace[]>
+}
+
+export default function AddItem({
+  fetchRates,
+  fetchCategories,
+  fetchMarketplaces,
+}: AddItemProps) {
   //hook-form
   const {
     register,
@@ -81,16 +91,18 @@ export default function AddItem() {
     setValue("sizeChartId", Number(event.target.value))
   }
 
-  //Api
-  const fetchCategories = useQuery("categories", getCategories)
-  const fetchMarketplaces = useQuery("marketplaces", getMarketplaces)
-  const fetchRates = useQuery("rates", getRates)
-
   //submit form = add to card
   const { setCart, setCheckoutStatus } = useContext(OrderCreateContext)
   const onSubmit = (data: any) => {
     const add = () => {
-      const newItem = { ...data, id: createItemId() }
+      const newItem = {
+        ...data,
+        id: createItemId(),
+        Size:
+          sizeChartId === sizeChartState.EU
+            ? (data.Size += "EU")
+            : (data.Size += ""),
+      }
       setCart((prev) => [...prev, newItem])
       addItem(newItem)
       reset()
