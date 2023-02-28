@@ -1,5 +1,5 @@
 import {
-  DeliveryPageLazy,
+  OrderCreatePageLazy,
   InfoPageLazy,
   TrackPageLazy,
 } from "../../../../pages"
@@ -20,7 +20,7 @@ export const RoutePath: Record<AppRoutes, string> = {
 export const routeConfig: Record<AppRoutes, RouteProps> = {
   [AppRoutes.MAIN]: {
     path: RoutePath.main,
-    element: <DeliveryPageLazy />,
+    element: <OrderCreatePageLazy />,
   },
   [AppRoutes.INFO]: {
     path: RoutePath.info,

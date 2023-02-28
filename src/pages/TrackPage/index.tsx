@@ -1,10 +1,9 @@
-import React from "react"
-import { Track } from "../../widgets/Track"
+import { TrackForm } from "../../widgets/Track"
 
 function TrackPage() {
   return (
     <>
-      <Track />
+      <TrackForm />
     </>
   )
 }

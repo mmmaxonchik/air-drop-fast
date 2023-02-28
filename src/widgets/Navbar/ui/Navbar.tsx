@@ -8,17 +8,17 @@ import {
 } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
-import Logo from "./static/Logo.svg"
-import Basket from "./static/Basket.svg"
-import Info from "./static/Info.svg"
-import Track from "./static/Track.svg"
+import Logo from "./../static/Logo.svg"
+import Basket from "./../static/Basket.svg"
+import Info from "./../static/Info.svg"
+import Track from "./../static/Track.svg"
 
 import style from "./navbar.module.scss"
 
 function Navbar() {
-  const [nav, setNav] = useState(window.innerWidth >= 420 ? "table" : "mobile")
+  const [nav, setNav] = useState(window.innerWidth >= 425 ? "table" : "mobile")
   const resizeComp = () => {
-    window.innerWidth >= 420 ? setNav("table") : setNav("mobile")
+    window.innerWidth >= 425 ? setNav("table") : setNav("mobile")
   }
   useEffect(() => {
     window.addEventListener("resize", resizeComp)

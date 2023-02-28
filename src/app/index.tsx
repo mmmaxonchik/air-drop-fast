@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Container } from "react-bootstrap"
+import { Footer } from "../entities/Footer"
 import { Navbar } from "../widgets/Navbar"
 import { AppRouter } from "./providers/router"
 import "./styles/index.scss"
@@ -9,9 +10,10 @@ function App() {
   return (
     <div className={theme === "dark" ? "App dark" : "App light"}>
       <Navbar />
-      <Container>
+      <Container style={{ flex: "1 0 auto" }}>
         <AppRouter />
       </Container>
+      <Footer />
     </div>
   )
 }

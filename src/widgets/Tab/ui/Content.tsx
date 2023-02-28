@@ -94,7 +94,11 @@ const Contacts = () => {
 }
 
 const Feedback = () => {
-  return <></>
+  return (
+    <div>
+      <h1>Отзывы</h1>
+    </div>
+  )
 }
 
 const Delivery = () => {
@@ -162,7 +166,7 @@ const Instruction = () => {
           <img alt="Info5" style={{ height: "calc(100vh/2)" }}></img>
           <hr></hr>
 
-          <p>5. Как на фото ищем артикул товара и указыеваем его. </p>
+          <p>5. Как на фото ищем артикул товара и указываем его. </p>
           <img alt="Info6" style={{ height: "calc(100vh/2)" }}></img>
           <hr></hr>
 

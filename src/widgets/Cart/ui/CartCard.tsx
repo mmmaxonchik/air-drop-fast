@@ -1,26 +1,30 @@
 import { useContext } from "react"
 import { CloseButton } from "react-bootstrap"
 import Card from "react-bootstrap/Card"
-import { IOrder } from "../../Delivery/lib/orderType"
+import { OrderCreateContext } from "../../../pages/OrderCreatePage/lib/orderCreate.context"
+import { Item } from "../../../pages/OrderCreatePage/types"
+
 import { deleteItem } from "../lib/deleteItem"
 import style from "./cart.module.scss"
-import { CartContext } from "./CartContext"
 
-function CardForCart({
+function CartCard({
   ItemName,
   Article,
   Link,
-  Category,
-  Marketplace,
+  CategoryId,
+  MarketplaceId,
+  RateId,
   Size,
   Price,
   Count,
   id,
-}: IOrder) {
-  const { setCart } = useContext(CartContext)
-  const deleteItemFromCart = (id: number) => {
-    setCart((prev) => prev.filter((item) => item.id !== id))
-    deleteItem(id)
+}: Item) {
+  const { setCart } = useContext(OrderCreateContext)
+  const deleteItemFromCart = (id: number | undefined) => {
+    if (typeof id !== "undefined") {
+      setCart((prev) => prev.filter((item) => item.id !== id))
+      deleteItem(id)
+    }
   }
   return (
     <Card className="mt-2">
@@ -53,4 +57,4 @@ function CardForCart({
   )
 }
 
-export default CardForCart
+export default CartCard

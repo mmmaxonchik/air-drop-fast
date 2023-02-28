@@ -1,3 +1,3 @@
-import Track from "./ui/TrackForm"
+import TrackForm from "./ui/TrackForm"
 
-export { Track }
+export { TrackForm }

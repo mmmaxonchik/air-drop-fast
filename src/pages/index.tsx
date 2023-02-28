@@ -1,7 +1,7 @@
 import React from "react"
 
-const DeliveryPageLazy = React.lazy(() => import("./DeliveryPage"))
+const OrderCreatePageLazy = React.lazy(() => import("./OrderCreatePage"))
 const InfoPageLazy = React.lazy(() => import("./InfoPage"))
 const TrackPageLazy = React.lazy(() => import("./TrackPage"))
 
-export { DeliveryPageLazy, InfoPageLazy, TrackPageLazy }
+export { OrderCreatePageLazy, InfoPageLazy, TrackPageLazy }

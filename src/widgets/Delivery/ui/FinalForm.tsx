@@ -1,27 +1,15 @@
 import { ChangeEvent, useState, useContext } from "react"
-import { Form, FloatingLabel, ButtonGroup, Button } from "react-bootstrap"
+import { Form, FloatingLabel, Button, Modal } from "react-bootstrap"
 import { useForm } from "react-hook-form"
-import { getCookie } from "../../../app/cookies/getCookie"
-import { IOrder } from "../lib/orderType"
-import { DeliveryContext, enumDeliveryState } from "./DeliveryForm"
+import { Link } from "react-router-dom"
+import { setSelect } from "../../../entities/setSelect"
+import { OrderCreateContext } from "../../../pages/OrderCreatePage/lib/orderCreate.context"
+import { CheckoutStatuses, Order } from "../../../pages/OrderCreatePage/types"
+import { DeliveryTypeType } from "../../../pages/OrderCreatePage/types/DeliveryTypeType"
 
 interface FinalFormProps {
-  step: enumDeliveryState
-}
-
-enum DeliveryType {
-  Pickup,
-  Delivery,
-}
-
-enum Posts {
-  Russia_Post = "Почта России",
-  SDEK = "СДЭК",
-}
-
-enum PayMethod {
-  MK_TINKOFF = "Михаил К. 5536914148518362 Тинькофф",
-  MK_SBSER = "Михаил К. 4276380130517951 Сбербанк",
+  step: CheckoutStatuses
+  deliveryTypes: DeliveryTypeType[]
 }
 
 interface IFormInputs {
@@ -30,6 +18,7 @@ interface IFormInputs {
   Email: string
   PhoneNumber: string
   Telegram: string
+  Comment: string
   DeliveryType: string
   Pickup: string
   Region: string
@@ -37,11 +26,77 @@ interface IFormInputs {
   Street: string
   HouseNumber: string
   PostIndex: string
-  File: string
-  PayType: string
+  DeliveryTypeId: number
 }
 
-function FinalForm({ step }: FinalFormProps) {
+const ModalInformation = (props: any) => {
+  return (
+    <Modal {...props} size="lg" centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Согласие на обработку персональных данных</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>Согласие на обработку персональных данных</p>
+        <p>
+          Настоящим в соответствии с Федеральным законом № 152-ФЗ «О
+          персональных данных» от 27.07.2006 года свободно, своей волей и в
+          своем интересе выражаю свое безусловное согласие на обработку моих
+          персональных данных ИП '' (ОГРНИП '', ИНН ''), зарегистрированным в
+          соответствии с законодательством РФ по адресу: (далее по тексту -
+          Оператор).
+        </p>
+        <p>
+          1. Согласие дается на обработку одной, нескольких или всех категорий
+          персональных данных, не являющихся специальными или биометрическими,
+          предоставляемых мною, которые могут включать:
+        </p>
+        <ul>
+          <li>- Имя Фамилия</li>
+          <li>- Адрес доставки</li>
+          <li>- Ссылка на Telegram</li>
+          <li>- Телефон</li>
+          <li>- E-Mail</li>
+        </ul>
+        <p>
+          2. Оператор может совершать следующие действия: сбор; запись;
+          систематизация; накопление; хранение; уточнение (обновление,
+          изменение); извлечение; использование; блокирование; удаление;
+          уничтожение.
+        </p>
+        <p>
+          3. Способы обработки: как с использованием средств автоматизации, так
+          и без их использования.
+        </p>
+        <p>
+          4. Цель обработки: предоставление мне услуг/работ, включая,
+          направление в мой адрес уведомлений, касающихся предоставляемых
+          услуг/работ, подготовка и направление ответов на мои запросы,
+          направление в мой адрес информации о
+          мероприятиях/товарах/услугах/работах Оператора.
+        </p>
+
+        <p>
+          5. Настоящее согласие действует до момента его отзыва путем
+          направления соответствующего уведомления на электронный адрес '' или
+          направления по адресу .
+        </p>
+        <p>
+          6. В случае отзыва мною согласия на обработку персональных данных
+          Оператор вправе продолжить обработку персональных данных без моего
+          согласия при наличии оснований, предусмотренных Федеральным законом
+          №152-ФЗ «О персональных данных» от 27.07.2006г.
+        </p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide} variant="dark">
+          Закрыть
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  )
+}
+
+function FinalForm({ step, deliveryTypes }: FinalFormProps) {
   //hook-form
   const {
     register,
@@ -53,72 +108,103 @@ function FinalForm({ step }: FinalFormProps) {
   })
 
   //DeliveryType
-  const [deliveryType, setDeliveryType] = useState<DeliveryType>(
-    DeliveryType.Pickup
-  )
-  const selectDeliveryType = (id: DeliveryType) => {
-    if (id === DeliveryType.Delivery) {
+  const [deliveryTypeNew, setDeliveryTypeNew] = useState<number>(0)
+  const selectDeliveryTypeNew = (event: ChangeEvent<HTMLSelectElement>) => {
+    const id = Number(event.target.value)
+    const eventNumber = isNaN(id)
+    eventNumber ? setDeliveryTypeNew(0) : setDeliveryTypeNew(id)
+    if (russia_post === id || sdek === id) {
       setValue("Pickup", "")
-      setDeliveryType(DeliveryType.Delivery)
     }
-    if (id === DeliveryType.Pickup) {
-      setValue("DeliveryType", "")
+    if (pickup === id) {
       setValue("Region", "")
       setValue("City", "")
       setValue("Street", "")
       setValue("HouseNumber", "")
       setValue("PostIndex", "")
-      setDeliveryType(DeliveryType.Pickup)
     }
   }
-
-  //Posts
-  const [posts, setPosts] = useState<Posts>(Posts.Russia_Post)
-  const selectPost = (event: ChangeEvent<HTMLSelectElement>) => {
-    const post = event.target.value
-    if (post === Posts.Russia_Post) {
-      setPosts(post)
-    }
-    if (post === Posts.SDEK) {
-      setPosts(post)
-    }
-  }
-
-  //Pay
-  const [pay, setPay] = useState<PayMethod>(PayMethod.MK_TINKOFF)
-  const selectPay = (event: ChangeEvent<HTMLSelectElement>) => {
-    const newPay = event.target.value
-    if (newPay === PayMethod.MK_TINKOFF) {
-      setPay(newPay)
-    }
-  }
+  const pickup = setSelect({ Name: "Самовывоз", ArrayAns: deliveryTypes })
+  const russia_post = setSelect({
+    Name: "Почта России",
+    ArrayAns: deliveryTypes,
+  })
+  const sdek = setSelect({ Name: "СДЭК", ArrayAns: deliveryTypes })
 
   //Steps
-  const { setDeliveryState } = useContext(DeliveryContext)
+  const { setCheckoutStatus } = useContext(OrderCreateContext)
   const nextStep = (id: number) => {
-    setDeliveryState(id)
+    setCheckoutStatus(id)
   }
   const prevStep = (id: number) => {
-    setDeliveryState(id - 1)
+    setCheckoutStatus(id - 1)
+  }
+
+  //Confirmation
+  const [confirmation, setConfirmation] = useState<boolean>(false)
+  const [modalInfoShow, setModalInfoShow] = useState(false)
+
+  //API
+  const { cart, setOrder } = useContext(OrderCreateContext)
+
+  const createOrderApi = async (data: IFormInputs) => {
+    const { Name, Surname, PhoneNumber, Email, Telegram, Comment } = data
+    const { DeliveryTypeId } = data
+    const { Pickup, Region, City, Street, HouseNumber, PostIndex } = data
+    const newOrder: Order = {
+      Name,
+      Surname,
+      PhoneNumber,
+      Email,
+      Telegram,
+      Comment,
+      DeliveryTypeId,
+      Address: {
+        Pickup: Pickup,
+        Region: Region,
+        City: City,
+        Street: Street,
+        HouseNumber: HouseNumber,
+        PostIndex: PostIndex,
+      },
+      Items: cart,
+    }
+    // try {
+    //   const order = await createOrder(newOrder)
+    //   setApiOrderState(ApiOrderStates.isLoading)
+    //   if (order) {
+    //     setOrder({ ...newOrder, OrderNumber: order })
+    //     setApiOrderState(ApiOrderStates.Success)
+    //   }
+    // } catch (e) {
+    //   setApiOrderState(ApiOrderStates.Error)
+    // }
   }
 
   //Submit
   const onSubmit = (data: IFormInputs) => {
-    console.log(data)
-    if (step === enumDeliveryState.PersonalInfo) {
-      nextStep(enumDeliveryState.PersonalInfo + 1)
+    if (step === CheckoutStatuses.PersonalInfo) {
+      nextStep(CheckoutStatuses.PersonalInfo + 1)
     }
-    if (
-      step === enumDeliveryState.DeliveryInfo &&
-      (data.Pickup.length > 0 || data.Region.length > 0)
-    ) {
-      nextStep(enumDeliveryState.DeliveryInfo + 1)
+    if (step === CheckoutStatuses.DeliveryInfo) {
+      if (deliveryTypeNew === russia_post || deliveryTypeNew === sdek) {
+        const validation =
+          data.Region.length > 0 && cart.length > 0 && confirmation
+        validation ? createOrderApi(data) : alert("Укажите все данные")
+      }
+      if (deliveryTypeNew === pickup) {
+        const validation =
+          data.Pickup.length > 0 && cart.length > 0 && confirmation
+        validation ? createOrderApi(data) : alert("Укажите все данные")
+      }
+      if (deliveryTypeNew === 0) {
+        alert("Выберете способ получения.")
+      }
     }
   }
-
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      {step === enumDeliveryState.PersonalInfo ? (
+      {step === CheckoutStatuses.PersonalInfo ? (
         <>
           <Form.Group className="mt-2">
             <FloatingLabel label={"Имя"}>
@@ -254,323 +340,34 @@ function FinalForm({ step }: FinalFormProps) {
             </Button>
             <Button
               variant="dark"
-              onClick={() => prevStep(enumDeliveryState.PersonalInfo)}
+              onClick={() => prevStep(CheckoutStatuses.PersonalInfo)}
             >
               Назад
             </Button>
           </div>
         </>
       ) : null}
-      {step === enumDeliveryState.DeliveryInfo ? (
+      {step === CheckoutStatuses.DeliveryInfo ? (
         <>
-          <div className="d-grid gap-1">
-            <ButtonGroup className="mt-2">
-              <Button
-                variant="dark"
-                onClick={() => selectDeliveryType(DeliveryType.Delivery)}
-              >
-                Доставка
-              </Button>
-              <Button
-                variant="dark"
-                onClick={() => selectDeliveryType(DeliveryType.Pickup)}
-              >
-                Самовывоз
-              </Button>
-            </ButtonGroup>
-          </div>
+          <FloatingLabel label={"Способы получения"} className={"mt-2"}>
+            <Form.Select
+              aria-label={"Способы получения"}
+              defaultValue={0}
+              {...register("DeliveryTypeId")}
+              onChange={selectDeliveryTypeNew}
+            >
+              <option value={0}>{"Выберете способ получения"}</option>
+              {deliveryTypes.map(({ Name, Id }) => (
+                <option value={Id} key={Id}>
+                  {Name}
+                </option>
+              ))}
+            </Form.Select>
+          </FloatingLabel>
 
-          {deliveryType === DeliveryType.Delivery ? (
-            <>
-              <FloatingLabel label={"Способ доставки"} className={"mt-2"}>
-                <Form.Select
-                  aria-label={"Способ доставки"}
-                  defaultValue={posts}
-                  {...register("DeliveryType")}
-                  onChange={selectPost}
-                >
-                  <option value={Posts.Russia_Post}>{Posts.Russia_Post}</option>
-                  <option value={Posts.SDEK}>{Posts.SDEK}</option>
-                </Form.Select>
-              </FloatingLabel>
-              {posts === Posts.Russia_Post ? (
-                <>
-                  <Form.Group className="mt-2">
-                    <FloatingLabel label={"Регион"}>
-                      <Form.Control
-                        type="text"
-                        placeholder="Регион"
-                        maxLength={100}
-                        isInvalid={
-                          typeof errors.Region !== "undefined" ? true : false
-                        }
-                        required
-                        {...register("Region", {
-                          maxLength: {
-                            value: 100,
-                            message: "Регион может иметь от 1 до 100 символов",
-                          },
-                          required: "Укажите регион",
-                        })}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {typeof errors.Region !== "undefined"
-                          ? errors.Region.message
-                          : null}
-                      </Form.Control.Feedback>
-                    </FloatingLabel>
-                  </Form.Group>
-                  <Form.Group className="mt-2">
-                    <FloatingLabel label={"Город"}>
-                      <Form.Control
-                        type="text"
-                        placeholder="Город"
-                        maxLength={100}
-                        isInvalid={
-                          typeof errors.City !== "undefined" ? true : false
-                        }
-                        required
-                        {...register("City", {
-                          maxLength: {
-                            value: 100,
-                            message: "Город может иметь от 1 до 100 символов",
-                          },
-                          required: "Укажите регион",
-                        })}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {typeof errors.City !== "undefined"
-                          ? errors.City.message
-                          : null}
-                      </Form.Control.Feedback>
-                    </FloatingLabel>
-                  </Form.Group>
-                  <Form.Group className="mt-2">
-                    <FloatingLabel label={"Улица"}>
-                      <Form.Control
-                        type="text"
-                        placeholder="Улица"
-                        maxLength={100}
-                        isInvalid={
-                          typeof errors.Street !== "undefined" ? true : false
-                        }
-                        required
-                        {...register("Street", {
-                          maxLength: {
-                            value: 100,
-                            message: "Улица может иметь от 1 до 100 символов",
-                          },
-                          required: "Укажите улицу",
-                        })}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {typeof errors.Street !== "undefined"
-                          ? errors.Street.message
-                          : null}
-                      </Form.Control.Feedback>
-                    </FloatingLabel>
-                  </Form.Group>
-                  <Form.Group className="mt-2">
-                    <FloatingLabel label={"Номер дома/строения"}>
-                      <Form.Control
-                        type="text"
-                        placeholder="Номер дома/строения"
-                        maxLength={100}
-                        isInvalid={
-                          typeof errors.HouseNumber !== "undefined"
-                            ? true
-                            : false
-                        }
-                        required
-                        {...register("HouseNumber", {
-                          maxLength: {
-                            value: 100,
-                            message:
-                              "Номер дома может иметь от 1 до 100 символов",
-                          },
-                          required: "Укажите номер дома/строения",
-                        })}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {typeof errors.HouseNumber !== "undefined"
-                          ? errors.HouseNumber.message
-                          : null}
-                      </Form.Control.Feedback>
-                    </FloatingLabel>
-                  </Form.Group>
-                  <Form.Group className="mt-2">
-                    <FloatingLabel label={"Почтовый индекс"}>
-                      <Form.Control
-                        type="text"
-                        placeholder="Почтовый индекс"
-                        maxLength={100}
-                        isInvalid={
-                          typeof errors.PostIndex !== "undefined" ? true : false
-                        }
-                        required
-                        {...register("PostIndex", {
-                          maxLength: {
-                            value: 100,
-                            message:
-                              "Почтовый индекс может иметь от 1 до 100 символов",
-                          },
-                          required: "Укажите почтовый индекс",
-                        })}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {typeof errors.PostIndex !== "undefined"
-                          ? errors.PostIndex.message
-                          : null}
-                      </Form.Control.Feedback>
-                    </FloatingLabel>
-                  </Form.Group>
-                </>
-              ) : null}
-              {posts === Posts.SDEK ? (
-                <>
-                  <h5 className="mt-2">Ближайший пункт выдачи СДЭК</h5>
-                  <>
-                    <Form.Group className="mt-2">
-                      <FloatingLabel label={"Регион"}>
-                        <Form.Control
-                          type="text"
-                          placeholder="Регион"
-                          maxLength={100}
-                          isInvalid={
-                            typeof errors.Region !== "undefined" ? true : false
-                          }
-                          required
-                          {...register("Region", {
-                            maxLength: {
-                              value: 100,
-                              message:
-                                "Регион может иметь от 1 до 100 символов",
-                            },
-                            required: "Укажите регион",
-                          })}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {typeof errors.Region !== "undefined"
-                            ? errors.Region.message
-                            : null}
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-                    <Form.Group className="mt-2">
-                      <FloatingLabel label={"Город"}>
-                        <Form.Control
-                          type="text"
-                          placeholder="Город"
-                          maxLength={100}
-                          isInvalid={
-                            typeof errors.City !== "undefined" ? true : false
-                          }
-                          required
-                          {...register("City", {
-                            maxLength: {
-                              value: 100,
-                              message: "Город может иметь от 1 до 100 символов",
-                            },
-                            required: "Укажите регион",
-                          })}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {typeof errors.City !== "undefined"
-                            ? errors.City.message
-                            : null}
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-                    <Form.Group className="mt-2">
-                      <FloatingLabel label={"Улица"}>
-                        <Form.Control
-                          type="text"
-                          placeholder="Улица"
-                          maxLength={100}
-                          isInvalid={
-                            typeof errors.Street !== "undefined" ? true : false
-                          }
-                          required
-                          {...register("Street", {
-                            maxLength: {
-                              value: 100,
-                              message: "Улица может иметь от 1 до 100 символов",
-                            },
-                            required: "Укажите улицу",
-                          })}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {typeof errors.Street !== "undefined"
-                            ? errors.Street.message
-                            : null}
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-                    <Form.Group className="mt-2">
-                      <FloatingLabel label={"Номер дома/строения"}>
-                        <Form.Control
-                          type="text"
-                          placeholder="Номер дома/строения"
-                          maxLength={100}
-                          isInvalid={
-                            typeof errors.HouseNumber !== "undefined"
-                              ? true
-                              : false
-                          }
-                          required
-                          {...register("HouseNumber", {
-                            maxLength: {
-                              value: 100,
-                              message:
-                                "Номер дома может иметь от 1 до 100 символов",
-                            },
-                            required: "Укажите номер дома/строения",
-                          })}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {typeof errors.HouseNumber !== "undefined"
-                            ? errors.HouseNumber.message
-                            : null}
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-                    <Form.Group className="mt-2">
-                      <FloatingLabel label={"Почтовый индекс"}>
-                        <Form.Control
-                          type="text"
-                          placeholder="Почтовый индекс"
-                          maxLength={100}
-                          isInvalid={
-                            typeof errors.PostIndex !== "undefined"
-                              ? true
-                              : false
-                          }
-                          required
-                          {...register("PostIndex", {
-                            maxLength: {
-                              value: 100,
-                              message:
-                                "Почтовый индекс может иметь от 1 до 100 символов",
-                            },
-                            required: "Укажите почтовый индекс",
-                          })}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {typeof errors.PostIndex !== "undefined"
-                            ? errors.PostIndex.message
-                            : null}
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-                  </>
-                </>
-              ) : null}
-            </>
-          ) : null}
-
-          {deliveryType === DeliveryType.Pickup ? (
-            <FloatingLabel label={"Категория"} className={"mt-2"}>
-              <Form.Select aria-label={"Категория"} {...register("Pickup")}>
+          {deliveryTypeNew === pickup ? (
+            <FloatingLabel label={"Пункты выдачи"} className={"mt-2"}>
+              <Form.Select aria-label={"Пункты выдачи"} {...register("Pickup")}>
                 {[
                   "Выберете пункт выдачи",
                   "Москва, метро Новаторская",
@@ -587,57 +384,177 @@ function FinalForm({ step }: FinalFormProps) {
             </FloatingLabel>
           ) : null}
 
-          <div className="mt-2 d-grid gap-2 mt-2">
-            <Button variant="dark" type="submit">
-              Продолжить
-            </Button>
-            <Button
-              variant="dark"
-              onClick={() => prevStep(enumDeliveryState.DeliveryInfo)}
-            >
-              Назад
-            </Button>
-          </div>
-        </>
-      ) : null}
-      {step === enumDeliveryState.Pay ? (
-        <>
-          <FloatingLabel label={"Оплата"} className={"mt-2"}>
-            <Form.Select
-              required
-              aria-label={"Оплата"}
-              defaultValue={pay}
-              {...register("PayType")}
-              onChange={selectPay}
-            >
-              <option value={PayMethod.MK_TINKOFF}>
-                {PayMethod.MK_TINKOFF}
-              </option>
-              <option value={PayMethod.MK_SBSER}>{PayMethod.MK_SBSER}</option>
-            </Form.Select>
-          </FloatingLabel>
-          <Form.Group controlId="formFile">
-            <Form.Label>Прикрепите скриншот оплаты</Form.Label>
+          {deliveryTypeNew !== pickup && deliveryTypeNew !== 0 ? (
+            <>
+              <Form.Group className="mt-2">
+                <FloatingLabel label={"Регион"}>
+                  <Form.Control
+                    type="text"
+                    placeholder="Регион"
+                    maxLength={100}
+                    isInvalid={
+                      typeof errors.Region !== "undefined" ? true : false
+                    }
+                    required
+                    {...register("Region", {
+                      maxLength: {
+                        value: 100,
+                        message: "Регион может иметь от 1 до 100 символов",
+                      },
+                      required: "Укажите регион",
+                    })}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {typeof errors.Region !== "undefined"
+                      ? errors.Region.message
+                      : null}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Form.Group>
+              <Form.Group className="mt-2">
+                <FloatingLabel label={"Город"}>
+                  <Form.Control
+                    type="text"
+                    placeholder="Город"
+                    maxLength={100}
+                    isInvalid={
+                      typeof errors.City !== "undefined" ? true : false
+                    }
+                    required
+                    {...register("City", {
+                      maxLength: {
+                        value: 100,
+                        message: "Город может иметь от 1 до 100 символов",
+                      },
+                      required: "Укажите регион",
+                    })}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {typeof errors.City !== "undefined"
+                      ? errors.City.message
+                      : null}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Form.Group>
+              <Form.Group className="mt-2">
+                <FloatingLabel label={"Улица"}>
+                  <Form.Control
+                    type="text"
+                    placeholder="Улица"
+                    maxLength={100}
+                    isInvalid={
+                      typeof errors.Street !== "undefined" ? true : false
+                    }
+                    required
+                    {...register("Street", {
+                      maxLength: {
+                        value: 100,
+                        message: "Улица может иметь от 1 до 100 символов",
+                      },
+                      required: "Укажите улицу",
+                    })}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {typeof errors.Street !== "undefined"
+                      ? errors.Street.message
+                      : null}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Form.Group>
+              <Form.Group className="mt-2">
+                <FloatingLabel label={"Номер дома/строения"}>
+                  <Form.Control
+                    type="text"
+                    placeholder="Номер дома/строения"
+                    maxLength={100}
+                    isInvalid={
+                      typeof errors.HouseNumber !== "undefined" ? true : false
+                    }
+                    required
+                    {...register("HouseNumber", {
+                      maxLength: {
+                        value: 100,
+                        message: "Номер дома может иметь от 1 до 100 символов",
+                      },
+                      required: "Укажите номер дома/строения",
+                    })}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {typeof errors.HouseNumber !== "undefined"
+                      ? errors.HouseNumber.message
+                      : null}
+                  </Form.Control.Feedback>
+                </FloatingLabel>
+              </Form.Group>
+              {deliveryTypeNew === russia_post ? (
+                <Form.Group className="mt-2">
+                  <FloatingLabel label={"Почтовый индекс"}>
+                    <Form.Control
+                      type="text"
+                      placeholder="Почтовый индекс"
+                      maxLength={100}
+                      isInvalid={
+                        typeof errors.PostIndex !== "undefined" ? true : false
+                      }
+                      required
+                      {...register("PostIndex", {
+                        maxLength: {
+                          value: 100,
+                          message:
+                            "Почтовый индекс может иметь от 1 до 100 символов",
+                        },
+                        required: "Укажите почтовый индекс",
+                      })}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {typeof errors.PostIndex !== "undefined"
+                        ? errors.PostIndex.message
+                        : null}
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+                </Form.Group>
+              ) : null}
+            </>
+          ) : null}
+
+          <Form.Group className="mt-3">
+            <Form.Label>Пожелания к заказу</Form.Label>
             <Form.Control
-              type="file"
-              accept=".jpg, .jpeg, .png"
-              isInvalid={typeof errors.File !== "undefined" ? true : false}
-              required
-              {...register("File", {
-                required: "Прикрепите скриншот об оплате",
-              })}
+              as="textarea"
+              rows={2}
+              maxLength={254}
+              placeholder="Если у вас есть пожелания к заказу, напишите их здесь."
+              {...register("Comment", { maxLength: 254 })}
             />
-            <Form.Control.Feedback type="invalid">
-              {typeof errors.File !== "undefined" ? errors.File.message : null}
-            </Form.Control.Feedback>
           </Form.Group>
+
+          <Form.Check
+            className="mt-2"
+            type="checkbox"
+            label={
+              <Link to="" onClick={() => setModalInfoShow(true)}>
+                Нажимая кнопку «Оформить заказ», я даю свое согласие на
+                обработку моих персональных данных, в соответствии с Федеральным
+                законом от 27.07.2006 года №152-ФЗ «О персональных данных», на
+                условиях и для целей, определенных в Согласии на обработку
+                персональных данных.
+              </Link>
+            }
+            onChange={() => setConfirmation(!confirmation)}
+            checked={confirmation}
+          />
+          <ModalInformation
+            show={modalInfoShow}
+            onHide={() => setModalInfoShow(false)}
+          />
+
           <div className="mt-2 d-grid gap-2 mt-2">
             <Button variant="dark" type="submit">
               Оформить заказ
             </Button>
             <Button
               variant="dark"
-              onClick={() => prevStep(enumDeliveryState.Pay)}
+              onClick={() => prevStep(CheckoutStatuses.DeliveryInfo)}
             >
               Назад
             </Button>

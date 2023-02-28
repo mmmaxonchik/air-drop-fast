@@ -3,6 +3,13 @@
   margin-top: 10px;
   .card{
     .header{
+      .cardTitle {
+          font-size: 15px;
+        }
+      .cardSubTitle {
+        font-size: 12px;
+        margin-bottom: 8px;
+      }
       display: flex;
       justify-content: space-between;
       flex-direction: row-reverse;
@@ -18,6 +25,10 @@
       margin-bottom: 8px;
     }
   }
+}
+
+.cartForm{
+  padding: 10px;
 }
 
 $phone: 425px;

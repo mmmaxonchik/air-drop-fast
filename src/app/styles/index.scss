@@ -5,14 +5,22 @@
 @import "./themes/dark.scss";
 @import "./themes/light.scss";
 
+
+html,
+body {
+  height: 100%;
+}
+
 .App{
   font: var(--font-m);
   background: var(--bg-color);
   color: var(--primary-color);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-input, select{
+input, select, .form-control{
   font-weight: 400 !important;;
   font-size: 1rem !important;;
   &:focus {
@@ -22,4 +30,9 @@ input, select{
     outline: 0 !important;;
     box-shadow: 0 0 0 0.25rem rgba(175, 175, 175, 0.25) !important;;
   }
+}
+
+.form-check-input:checked {
+  background-color: #000000 !important;
+  border-color: #000000 !important;
 }
