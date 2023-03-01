@@ -1,15 +1,18 @@
 import { ChangeEvent, useState, useContext } from "react"
 import { Form, FloatingLabel, Button, Modal } from "react-bootstrap"
 import { useForm } from "react-hook-form"
+import { UseMutationResult, UseQueryResult } from "react-query"
 import { Link } from "react-router-dom"
 import { setSelect } from "../../../entities/setSelect"
 import { OrderCreateContext } from "../../../pages/OrderCreatePage/lib/orderCreate.context"
 import { CheckoutStatuses, Order } from "../../../pages/OrderCreatePage/types"
 import { DeliveryTypeType } from "../../../pages/OrderCreatePage/types/DeliveryTypeType"
+import { InputLoader } from "../../../shared/InputLoader"
 
 interface FinalFormProps {
   step: CheckoutStatuses
-  deliveryTypes: DeliveryTypeType[]
+  fetchDeliveryTypes: UseQueryResult<DeliveryTypeType[]>
+  postNewOrder: UseMutationResult<any, unknown, Order, unknown>
 }
 
 interface IFormInputs {
@@ -96,7 +99,7 @@ const ModalInformation = (props: any) => {
   )
 }
 
-function FinalForm({ step, deliveryTypes }: FinalFormProps) {
+function FinalForm({ step, fetchDeliveryTypes, postNewOrder }: FinalFormProps) {
   //hook-form
   const {
     register,
@@ -124,15 +127,17 @@ function FinalForm({ step, deliveryTypes }: FinalFormProps) {
       setValue("PostIndex", "")
     }
   }
-  const pickup = setSelect({ Name: "Самовывоз", ArrayAns: deliveryTypes })
+  const pickup = setSelect({
+    Name: "Самовывоз",
+    ArrayAns: fetchDeliveryTypes.data,
+  })
   const russia_post = setSelect({
     Name: "Почта России",
-    ArrayAns: deliveryTypes,
+    ArrayAns: fetchDeliveryTypes.data,
   })
-  const sdek = setSelect({ Name: "СДЭК", ArrayAns: deliveryTypes })
+  const sdek = setSelect({ Name: "СДЭК", ArrayAns: fetchDeliveryTypes.data })
 
   //Steps
-  const { setCheckoutStatus } = useContext(OrderCreateContext)
   const nextStep = (id: number) => {
     setCheckoutStatus(id)
   }
@@ -145,7 +150,7 @@ function FinalForm({ step, deliveryTypes }: FinalFormProps) {
   const [modalInfoShow, setModalInfoShow] = useState(false)
 
   //API
-  const { cart, setOrder } = useContext(OrderCreateContext)
+  const { cart, setCheckoutStatus, setOrder } = useContext(OrderCreateContext)
 
   const createOrderApi = async (data: IFormInputs) => {
     const { Name, Surname, PhoneNumber, Email, Telegram, Comment } = data
@@ -169,16 +174,11 @@ function FinalForm({ step, deliveryTypes }: FinalFormProps) {
       },
       Items: cart,
     }
-    // try {
-    //   const order = await createOrder(newOrder)
-    //   setApiOrderState(ApiOrderStates.isLoading)
-    //   if (order) {
-    //     setOrder({ ...newOrder, OrderNumber: order })
-    //     setApiOrderState(ApiOrderStates.Success)
-    //   }
-    // } catch (e) {
-    //   setApiOrderState(ApiOrderStates.Error)
-    // }
+    try {
+      postNewOrder.mutate(newOrder)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   //Submit
@@ -349,21 +349,25 @@ function FinalForm({ step, deliveryTypes }: FinalFormProps) {
       ) : null}
       {step === CheckoutStatuses.DeliveryInfo ? (
         <>
-          <FloatingLabel label={"Способы получения"} className={"mt-2"}>
-            <Form.Select
-              aria-label={"Способы получения"}
-              defaultValue={0}
-              {...register("DeliveryTypeId")}
-              onChange={selectDeliveryTypeNew}
-            >
-              <option value={0}>{"Выберете способ получения"}</option>
-              {deliveryTypes.map(({ Name, Id }) => (
-                <option value={Id} key={Id}>
-                  {Name}
-                </option>
-              ))}
-            </Form.Select>
-          </FloatingLabel>
+          {fetchDeliveryTypes.isLoading ? (
+            <InputLoader />
+          ) : (
+            <FloatingLabel label={"Способы получения"} className={"mt-2"}>
+              <Form.Select
+                aria-label={"Способы получения"}
+                defaultValue={0}
+                {...register("DeliveryTypeId")}
+                onChange={selectDeliveryTypeNew}
+              >
+                <option value={0}>{"Выберете способ получения"}</option>
+                {fetchDeliveryTypes.data?.map(({ Name, Id }) => (
+                  <option value={Id} key={Id}>
+                    {Name}
+                  </option>
+                ))}
+              </Form.Select>
+            </FloatingLabel>
+          )}
 
           {deliveryTypeNew === pickup ? (
             <FloatingLabel label={"Пункты выдачи"} className={"mt-2"}>

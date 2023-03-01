@@ -1,17 +1,19 @@
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Card } from "react-bootstrap"
 //Ui
 import CartCard from "./CartCard"
 import AddItem from "./AddItem"
+import CartCardFooter from "./CartCardFooter"
 //Context
 import { OrderCreateContext } from "../../../pages/OrderCreatePage/lib/orderCreate.context"
 //Style
 import style from "./cart.module.scss"
 //Type
 import { CheckoutStatuses } from "../../../pages/OrderCreatePage/types"
-import { useQuery } from "react-query"
+import { useQuery, useMutation } from "react-query"
 import {
   getCategories,
+  getFinalPrice,
   getMarketplaces,
   getRates,
 } from "../../../pages/OrderCreatePage/api"
@@ -22,6 +24,11 @@ function Cart() {
   const fetchRates = useQuery("rates", getRates)
   const fetchCategories = useQuery("categories", getCategories)
   const fetchMarketplaces = useQuery("marketplaces", getMarketplaces)
+  const fetchFinalPrice = useMutation(getFinalPrice)
+
+  useEffect(() => {
+    fetchFinalPrice.mutate(cart)
+  }, [cart])
   return (
     <div>
       {checkoutStatus === CheckoutStatuses.Order ? (
@@ -31,18 +38,21 @@ function Cart() {
             fetchCategories={fetchCategories}
             fetchMarketplaces={fetchMarketplaces}
           />
-          <Card className={style.cardForCart}>
-            <Card.Title>Корзина</Card.Title>
-            {cart.map((props, index) => (
-              <CartCard
-                fetchRates={fetchRates}
-                fetchCategories={fetchCategories}
-                fetchMarketplaces={fetchMarketplaces}
-                {...props}
-                key={index}
-              />
-            ))}
-          </Card>
+          {cart.length > 0 ? (
+            <Card className={style.cardForCart}>
+              <Card.Title>Корзина</Card.Title>
+              {cart.map((props, index) => (
+                <CartCard
+                  fetchRates={fetchRates}
+                  fetchCategories={fetchCategories}
+                  fetchMarketplaces={fetchMarketplaces}
+                  {...props}
+                  key={index}
+                />
+              ))}
+              <CartCardFooter fetchFinalPrice={fetchFinalPrice} />
+            </Card>
+          ) : null}
         </>
       ) : null}
     </div>

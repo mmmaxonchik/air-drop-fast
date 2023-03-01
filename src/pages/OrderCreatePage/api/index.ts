@@ -3,6 +3,7 @@ import { getMarketplaces } from "./Marketplace"
 import { getCategories } from "./Category"
 import { createOrder } from "./Order"
 import { getDeliveryTypes } from "./DeliveryType"
+import { getFinalPrice } from "./Item"
 
 //Category
 export { getCategories }
@@ -14,3 +15,5 @@ export { createOrder }
 export { getRates }
 //DeliveryType
 export { getDeliveryTypes }
+//Item
+export { getFinalPrice }

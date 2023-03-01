@@ -1,35 +1,37 @@
 import { useState, useContext, useEffect } from "react"
-import { Card } from "react-bootstrap"
 //Ui
 import FinalForm from "./FinalForm"
 //Api
-import { getDeliveryTypes } from "../api"
+import {
+  createOrder,
+  getDeliveryTypes,
+} from "../../../pages/OrderCreatePage/api"
 //Context
 import { OrderCreateContext } from "../../../pages/OrderCreatePage/lib/orderCreate.context"
 //Type
-import {
-  CheckoutStatuses,
-  Marketplace,
-} from "../../../pages/OrderCreatePage/types"
+import { CheckoutStatuses } from "../../../pages/OrderCreatePage/types"
+import { useQuery, useMutation } from "react-query"
 
 function DeliveryForm() {
   //API
-  const [deliveryTypes, setDeliveryTypes] = useState<Marketplace[]>([])
-  const getAllDeliveryTypes = async () => {
-    const types = await getDeliveryTypes()
-    setDeliveryTypes(types)
-  }
-
-  useEffect(() => {
-    getAllDeliveryTypes()
-  }, [])
+  const fetchDeliveryTypes = useQuery("deliveryTypes", getDeliveryTypes)
+  const postNewOrder = useMutation(createOrder)
 
   const { checkoutStatus } = useContext(OrderCreateContext)
   return (
     <>
       {checkoutStatus !== CheckoutStatuses.Order ? (
-        <FinalForm step={checkoutStatus} deliveryTypes={deliveryTypes} />
+        <FinalForm
+          step={checkoutStatus}
+          fetchDeliveryTypes={fetchDeliveryTypes}
+          postNewOrder={postNewOrder}
+        />
       ) : null}
+      {postNewOrder.isIdle ? null : (
+        <div>
+          {postNewOrder.isLoading ? <></> : <h1>{postNewOrder.data}</h1>}
+        </div>
+      )}
     </>
   )
 }
