@@ -150,12 +150,20 @@ function FinalForm({ step, fetchDeliveryTypes, postNewOrder }: FinalFormProps) {
   const [modalInfoShow, setModalInfoShow] = useState(false)
 
   //API
-  const { cart, setCheckoutStatus, setOrder } = useContext(OrderCreateContext)
+  const { cart, setCheckoutStatus } = useContext(OrderCreateContext)
 
   const createOrderApi = async (data: IFormInputs) => {
     const { Name, Surname, PhoneNumber, Email, Telegram, Comment } = data
     const { DeliveryTypeId } = data
     const { Pickup, Region, City, Street, HouseNumber, PostIndex } = data
+    const Address = {
+      Pickup,
+      Region,
+      City,
+      Street,
+      HouseNumber,
+      PostIndex,
+    }
     const newOrder: Order = {
       Name,
       Surname,
@@ -164,14 +172,7 @@ function FinalForm({ step, fetchDeliveryTypes, postNewOrder }: FinalFormProps) {
       Telegram,
       Comment,
       DeliveryTypeId,
-      Address: {
-        Pickup: Pickup,
-        Region: Region,
-        City: City,
-        Street: Street,
-        HouseNumber: HouseNumber,
-        PostIndex: PostIndex,
-      },
+      Address,
       Items: cart,
     }
     try {

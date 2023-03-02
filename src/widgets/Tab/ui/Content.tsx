@@ -1,11 +1,9 @@
-import { Col } from "react-bootstrap"
-import Tab from "react-bootstrap/Tab"
-import Accordion from "react-bootstrap/Accordion"
-import Card from "react-bootstrap/Card"
+import { memo } from "react"
+import { Col, Tab, Accordion, Card } from "react-bootstrap"
 import style from "./tab.module.scss"
 import { InfoTabsEnum } from "./Tab"
 
-const AboutUs = () => {
+const AboutUs = memo(() => {
   return (
     <Accordion defaultActiveKey="0" className={style.accordion}>
       <Accordion.Item eventKey="0">
@@ -30,9 +28,9 @@ const AboutUs = () => {
       </Accordion.Item>
     </Accordion>
   )
-}
+})
 
-const AboutUs1 = () => {
+const AboutUs1 = memo(() => {
   return (
     <div>
       <h1>О нас</h1>
@@ -54,9 +52,9 @@ const AboutUs1 = () => {
       </p>
     </div>
   )
-}
+})
 
-const Contacts = () => {
+const Contacts = memo(() => {
   return (
     <div>
       <h1>Контакты</h1>
@@ -68,7 +66,7 @@ const Contacts = () => {
             Телеграм или написав нам на почту.
           </Card.Text>
           <Card.Link href="https://t.me/AirDrop_Support1">Telegram</Card.Link>
-          <Card.Link href="#">Gmail</Card.Link>
+          <Card.Link href="">Gmail</Card.Link>
         </Card.Body>
       </Card>
       <Card className="mb-2">
@@ -86,22 +84,22 @@ const Contacts = () => {
             Администратор
           </Card.Subtitle>
           <Card.Link href="https://t.me/AirDrop_Support1">Telegram</Card.Link>
-          <Card.Link href="#">Vk</Card.Link>
+          <Card.Link href="">Vk</Card.Link>
         </Card.Body>
       </Card>
     </div>
   )
-}
+})
 
-const Feedback = () => {
+const Feedback = memo(() => {
   return (
     <div>
       <h1>Отзывы</h1>
     </div>
   )
-}
+})
 
-const Delivery = () => {
+const Delivery = memo(() => {
   return (
     <div>
       <h1>Доставка</h1>
@@ -121,9 +119,9 @@ const Delivery = () => {
       </p>
     </div>
   )
-}
+})
 
-const Pay = () => {
+const Pay = memo(() => {
   return (
     <div>
       <h1>Оплата</h1>
@@ -133,53 +131,54 @@ const Pay = () => {
       </p>
     </div>
   )
-}
+})
 
-const Instruction = () => {
+const Instruction = memo(() => {
   return (
-    <Accordion defaultActiveKey="0" className={style.accordion}>
-      <Accordion.Item eventKey="0">
-        <Accordion.Header>Poizon</Accordion.Header>
-        <Accordion.Body>
-          <p>
-            1. Устанавливаем приложение Poizon
-            <a href="https://apps.apple.com/HK/app/id1509915974?mt=8"> IOS</a>/
-            <a href="https://www.poizon.com/">Android</a>.
-          </p>
-          <hr></hr>
-          <p>
-            2. Заходим в приложение и в строке поиска пишем артикул или название
-            вещи,нажимаем кнопку поиска. Находим и нажимаем на нужную пару.
-          </p>
-          <img alt="Info1" style={{ height: "calc(100vh/2)" }}></img>
-          <img alt="Info2" style={{ height: "calc(100vh/2)" }}></img>
-          <img alt="Info3" style={{ height: "calc(100vh/2)" }}></img>
-          <hr></hr>
-          <p>3. Нажимаем на нижнюю кнопку(Выбор размера)</p>
-          <img alt="Info4" style={{ height: "calc(100vh/2)" }}></img>
-          <hr></hr>
-          <p>
-            4. Выбираем кнопку для заказа *Бирюзовая кнопка (2-6 дней доставка
-            до склада в Китае) *Черная кнопка (5-14 дней доставка до склада в
-            Китае) *Серая кнопка (Б/у вещи)
-          </p>
-          <img alt="Info5" style={{ height: "calc(100vh/2)" }}></img>
-          <hr></hr>
+    <h1>Инструкция</h1>
+    // <Accordion defaultActiveKey="0" className={style.accordion}>
+    //   <Accordion.Item eventKey="0">
+    //     <Accordion.Header>Poizon</Accordion.Header>
+    //     <Accordion.Body>
+    //       <p>
+    //         1. Устанавливаем приложение Poizon
+    //         <a href="https://apps.apple.com/HK/app/id1509915974?mt=8"> IOS</a>/
+    //         <a href="https://www.poizon.com/">Android</a>.
+    //       </p>
+    //       <hr></hr>
+    //       <p>
+    //         2. Заходим в приложение и в строке поиска пишем артикул или название
+    //         вещи,нажимаем кнопку поиска. Находим и нажимаем на нужную пару.
+    //       </p>
+    //       <img alt="Info1" style={{ height: "calc(100vh/2)" }}></img>
+    //       <img alt="Info2" style={{ height: "calc(100vh/2)" }}></img>
+    //       <img alt="Info3" style={{ height: "calc(100vh/2)" }}></img>
+    //       <hr></hr>
+    //       <p>3. Нажимаем на нижнюю кнопку(Выбор размера)</p>
+    //       <img alt="Info4" style={{ height: "calc(100vh/2)" }}></img>
+    //       <hr></hr>
+    //       <p>
+    //         4. Выбираем кнопку для заказа *Бирюзовая кнопка (2-6 дней доставка
+    //         до склада в Китае) *Черная кнопка (5-14 дней доставка до склада в
+    //         Китае) *Серая кнопка (Б/у вещи)
+    //       </p>
+    //       <img alt="Info5" style={{ height: "calc(100vh/2)" }}></img>
+    //       <hr></hr>
 
-          <p>5. Как на фото ищем артикул товара и указываем его. </p>
-          <img alt="Info6" style={{ height: "calc(100vh/2)" }}></img>
-          <hr></hr>
+    //       <p>5. Как на фото ищем артикул товара и указываем его. </p>
+    //       <img alt="Info6" style={{ height: "calc(100vh/2)" }}></img>
+    //       <hr></hr>
 
-          <p>
-            6. Указываем всё в заказе и вам выдаётся стоимость товара (включая
-            доставку), если вас все устраивает, то оплачиваете ваш заказ.
-            Остальное остается за нами.
-          </p>
-        </Accordion.Body>
-      </Accordion.Item>
-    </Accordion>
+    //       <p>
+    //         6. Указываем всё в заказе и вам выдаётся стоимость товара (включая
+    //         доставку), если вас все устраивает, то оплачиваете ваш заказ.
+    //         Остальное остается за нами.
+    //       </p>
+    //     </Accordion.Body>
+    //   </Accordion.Item>
+    // </Accordion>
   )
-}
+})
 
 export function Content() {
   return (

@@ -35,6 +35,13 @@
   padding: 10px;
 }
 
+.cartError{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+}
+
 $phone: 425px;
 
 @media screen and (max-width: $phone) {

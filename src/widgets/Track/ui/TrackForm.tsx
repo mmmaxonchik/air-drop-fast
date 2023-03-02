@@ -2,11 +2,13 @@ import style from "./track.module.scss"
 import { useForm } from "react-hook-form"
 import { FloatingLabel, Form, Card, Button } from "react-bootstrap"
 import TrackCard from "./TrackCard"
+import { useMutation } from "react-query"
+import { getTrackData, TrackDataType } from "../../../pages/TrackPage/api/Order"
 
 interface IFormInputs {
   Name: string
-  SecondName: string
-  PhoneNumber: string
+  Surname: string
+  OrderNumber: string
 }
 
 function TrackForm() {
@@ -20,10 +22,11 @@ function TrackForm() {
   })
 
   //api
+  const postTrackData = useMutation(getTrackData)
 
   //submit
-  const onSubmit = (data: any) => {
-    console.log(data)
+  const onSubmit = (data: TrackDataType) => {
+    postTrackData.mutate(data)
   }
   return (
     <>
@@ -59,11 +62,9 @@ function TrackForm() {
                 type="text"
                 placeholder="Фамилия"
                 maxLength={80}
-                isInvalid={
-                  typeof errors.SecondName !== "undefined" ? true : false
-                }
+                isInvalid={typeof errors.Surname !== "undefined" ? true : false}
                 required
-                {...register("SecondName", {
+                {...register("Surname", {
                   maxLength: {
                     value: 80,
                     message: "Фамилия может содержать от 1 до 80 символов",
@@ -72,33 +73,34 @@ function TrackForm() {
                 })}
               />
               <Form.Control.Feedback type="invalid">
-                {typeof errors.SecondName !== "undefined"
-                  ? errors.SecondName.message
+                {typeof errors.Surname !== "undefined"
+                  ? errors.Surname.message
                   : null}
               </Form.Control.Feedback>
             </FloatingLabel>
           </Form.Group>
           <Form.Group className="mt-2">
-            <FloatingLabel label={"Номер телефона"}>
+            <FloatingLabel label={"Номер заказа"}>
               <Form.Control
                 inputMode="tel"
                 type="tel"
-                placeholder="Номер телефона"
+                placeholder="Номер заказа"
                 isInvalid={
-                  typeof errors.PhoneNumber !== "undefined" ? true : false
+                  typeof errors.OrderNumber !== "undefined" ? true : false
                 }
                 required
-                {...register("PhoneNumber", {
+                {...register("OrderNumber", {
                   pattern: {
-                    value: /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/,
-                    message: "Введите номер телефона в +7 9** ** **",
+                    value: /.[ADL].[0-9]{0,13}.[-].[a-zA-ZА-Яа-я]/g,
+                    message:
+                      "Введите номер заказа в формате ADL*************-**",
                   },
-                  required: "Укажите номер телефона",
+                  required: "Укажите номер заказа",
                 })}
               />
               <Form.Control.Feedback type="invalid">
-                {typeof errors.PhoneNumber !== "undefined"
-                  ? errors.PhoneNumber.message
+                {typeof errors.OrderNumber !== "undefined"
+                  ? errors.OrderNumber.message
                   : null}
               </Form.Control.Feedback>
             </FloatingLabel>
@@ -110,7 +112,9 @@ function TrackForm() {
           </div>
         </Form>
       </Card>
-      <TrackCard />
+      {postTrackData.isIdle ? null : (
+        <TrackCard postTrackData={postTrackData} />
+      )}
     </>
   )
 }

@@ -7,12 +7,10 @@ import {
   Nav,
 } from "react-bootstrap"
 import { Link } from "react-router-dom"
-
 import Logo from "./../static/Logo.svg"
 import Basket from "./../static/Basket.svg"
 import Info from "./../static/Info.svg"
 import Track from "./../static/Track.svg"
-
 import style from "./navbar.module.scss"
 
 function Navbar() {

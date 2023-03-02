@@ -10,7 +10,7 @@ function App() {
   return (
     <div className={theme === "dark" ? "App dark" : "App light"}>
       <Navbar />
-      <Container style={{ flex: "1 0 auto" }}>
+      <Container className="container">
         <AppRouter />
       </Container>
       <Footer />

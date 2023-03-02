@@ -1,6 +1,13 @@
-import { ChangeEvent, useContext } from "react"
+import { ChangeEvent, useContext, memo } from "react"
 import { useForm, useWatch } from "react-hook-form"
-import { FloatingLabel, Form, Button, Row, Col } from "react-bootstrap"
+import {
+  FloatingLabel,
+  Form,
+  Button,
+  Row,
+  Col,
+  Placeholder,
+} from "react-bootstrap"
 //Lib
 import { createItemId } from "../lib/createItemId"
 import { addItem } from "../lib/addItem"
@@ -45,6 +52,10 @@ interface AddItemProps {
   fetchCategories: UseQueryResult<Category[]>
   fetchMarketplaces: UseQueryResult<Marketplace[]>
 }
+
+const ErrorAddItem = memo(() => {
+  return <></>
+})
 
 export default function AddItem({
   fetchRates,
@@ -98,11 +109,15 @@ export default function AddItem({
       const newItem = {
         ...data,
         id: createItemId(),
-        Size:
-          sizeChartId === sizeChartState.EU
-            ? (data.Size += "EU")
-            : (data.Size += ""),
       }
+      if (
+        sizeChartId === sizeChartState.EU &&
+        categoryId ===
+          setSelect({ Name: "Кроссовки", ArrayAns: fetchCategories.data })
+      ) {
+        newItem.Size = newItem.Size + "EU"
+      }
+
       setCart((prev) => [...prev, newItem])
       addItem(newItem)
       reset()
@@ -231,31 +246,89 @@ export default function AddItem({
           </Form.Select>
         </FloatingLabel>
       )}
-
-      {categoryId ===
-      setSelect({ Name: "Кроссовки", ArrayAns: fetchCategories.data }) ? (
-        <Row>
-          <Col>
+      {fetchCategories.isLoading &&
+      fetchRates.isLoading &&
+      fetchMarketplaces.isLoading ? null : (
+        <>
+          {categoryId ===
+          setSelect({ Name: "Кроссовки", ArrayAns: fetchCategories.data }) ? (
+            <Row>
+              <Col>
+                <Form.Group className="mt-2">
+                  <FloatingLabel label={"Размер"}>
+                    <Form.Control
+                      type={
+                        categoryId === sizeChartState.EU ? "number" : "text"
+                      }
+                      inputMode={
+                        categoryId === sizeChartState.EU ? "numeric" : "text"
+                      }
+                      disabled={
+                        categoryId === sizeChartState.None ? true : false
+                      }
+                      placeholder="Размер"
+                      isInvalid={
+                        typeof errors.Size !== "undefined" ? true : false
+                      }
+                      required
+                      {...register("Size", {
+                        min: {
+                          value: 1,
+                          message: "Минимальный размер в данной сетке 52 EUR",
+                        },
+                        max: {
+                          value: 52,
+                          message: "Максимальный размер в данной сетке 52 EUR",
+                        },
+                        maxLength: {
+                          value: 10,
+                          message: "Максимальная длинна размера 10 символов",
+                        },
+                        minLength: {
+                          value: 1,
+                          message: "Минимальная длинна размера 1 символ",
+                        },
+                        required: "Укажите размер товара",
+                      })}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {typeof errors.Size !== "undefined"
+                        ? errors.Size.message
+                        : null}
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+                </Form.Group>
+              </Col>
+              <Col>
+                <FloatingLabel
+                  label="Размерная сетка"
+                  className="mt-2"
+                  {...register("sizeChartId")}
+                  onChange={selectSizeChart}
+                  defaultValue={sizeChartState.None}
+                >
+                  <Form.Select>
+                    <option value={0}>{"Выберите размерную сетку"}</option>
+                    {["EU", "Custom"].map((value, index) => (
+                      <option key={index} value={index + 1}>
+                        {value}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </FloatingLabel>
+              </Col>
+            </Row>
+          ) : null}
+          {categoryId ===
+          setSelect({ Name: "Одежда", ArrayAns: fetchCategories.data }) ? (
             <Form.Group className="mt-2">
               <FloatingLabel label={"Размер"}>
                 <Form.Control
-                  type={categoryId === sizeChartState.EU ? "number" : "text"}
-                  inputMode={
-                    categoryId === sizeChartState.EU ? "numeric" : "text"
-                  }
-                  disabled={categoryId === sizeChartState.None ? true : false}
+                  type="text"
                   placeholder="Размер"
                   isInvalid={typeof errors.Size !== "undefined" ? true : false}
                   required
                   {...register("Size", {
-                    min: {
-                      value: 1,
-                      message: "Минимальный размер в данной сетке 52 EUR",
-                    },
-                    max: {
-                      value: 52,
-                      message: "Максимальный размер в данной сетке 52 EUR",
-                    },
                     maxLength: {
                       value: 10,
                       message: "Максимальная длинна размера 10 символов",
@@ -274,54 +347,9 @@ export default function AddItem({
                 </Form.Control.Feedback>
               </FloatingLabel>
             </Form.Group>
-          </Col>
-          <Col>
-            <FloatingLabel
-              label="Размерная сетка"
-              className="mt-2"
-              {...register("sizeChartId")}
-              onChange={selectSizeChart}
-              defaultValue={sizeChartState.None}
-            >
-              <Form.Select>
-                <option value={0}>{"Выберите размерную сетку"}</option>
-                {["EU", "Custom"].map((value, index) => (
-                  <option key={index} value={index + 1}>
-                    {value}
-                  </option>
-                ))}
-              </Form.Select>
-            </FloatingLabel>
-          </Col>
-        </Row>
-      ) : null}
-      {categoryId ===
-      setSelect({ Name: "Одежда", ArrayAns: fetchCategories.data }) ? (
-        <Form.Group className="mt-2">
-          <FloatingLabel label={"Размер"}>
-            <Form.Control
-              type="text"
-              placeholder="Размер"
-              isInvalid={typeof errors.Size !== "undefined" ? true : false}
-              required
-              {...register("Size", {
-                maxLength: {
-                  value: 10,
-                  message: "Максимальная длинна размера 10 символов",
-                },
-                minLength: {
-                  value: 1,
-                  message: "Минимальная длинна размера 1 символ",
-                },
-                required: "Укажите размер товара",
-              })}
-            />
-            <Form.Control.Feedback type="invalid">
-              {typeof errors.Size !== "undefined" ? errors.Size.message : null}
-            </Form.Control.Feedback>
-          </FloatingLabel>
-        </Form.Group>
-      ) : null}
+          ) : null}
+        </>
+      )}
       <Row>
         <Col>
           <Form.Group className="mt-2">
@@ -400,12 +428,34 @@ export default function AddItem({
         </FloatingLabel>
       </Form.Group>
       <div className="mt-2 d-grid gap-2 mt-2">
-        <Button variant="dark" type="submit">
-          Добавить в корзину
-        </Button>
-        <Button variant="dark" onClick={() => nextStep()}>
-          Продолжить
-        </Button>
+        {fetchCategories.isLoading &&
+        fetchRates.isLoading &&
+        fetchMarketplaces.isLoading ? (
+          <>
+            <Placeholder.Button
+              variant="dark"
+              aria-hidden="true"
+              animation="wave"
+              style={{ height: "38px" }}
+            />
+            <Placeholder.Button
+              variant="dark"
+              aria-hidden="true"
+              animation="wave"
+              className="mt-2"
+              style={{ height: "38px" }}
+            />
+          </>
+        ) : (
+          <>
+            <Button variant="dark" type="submit">
+              Добавить в корзину
+            </Button>
+            <Button variant="dark" onClick={() => nextStep()}>
+              Продолжить
+            </Button>
+          </>
+        )}
       </div>
     </Form>
   )

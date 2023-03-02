@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect } from "react"
 import { Card } from "react-bootstrap"
 //Ui
 import CartCard from "./CartCard"
@@ -33,26 +33,36 @@ function Cart() {
     <div>
       {checkoutStatus === CheckoutStatuses.Order ? (
         <>
-          <AddItem
-            fetchRates={fetchRates}
-            fetchCategories={fetchCategories}
-            fetchMarketplaces={fetchMarketplaces}
-          />
-          {cart.length > 0 ? (
-            <Card className={style.cardForCart}>
-              <Card.Title>Корзина</Card.Title>
-              {cart.map((props, index) => (
-                <CartCard
-                  fetchRates={fetchRates}
-                  fetchCategories={fetchCategories}
-                  fetchMarketplaces={fetchMarketplaces}
-                  {...props}
-                  key={index}
-                />
-              ))}
-              <CartCardFooter fetchFinalPrice={fetchFinalPrice} />
+          {fetchRates.isError &&
+          fetchCategories.isError &&
+          fetchMarketplaces.isError ? (
+            <Card className={style.cartError}>
+              <Card.Title>Произошла ошибка, попробуйте позже.</Card.Title>
             </Card>
-          ) : null}
+          ) : (
+            <>
+              <AddItem
+                fetchRates={fetchRates}
+                fetchCategories={fetchCategories}
+                fetchMarketplaces={fetchMarketplaces}
+              />
+              {cart.length > 0 ? (
+                <Card className={style.cardForCart}>
+                  <Card.Title>Корзина</Card.Title>
+                  {cart.map((props, index) => (
+                    <CartCard
+                      fetchRates={fetchRates}
+                      fetchCategories={fetchCategories}
+                      fetchMarketplaces={fetchMarketplaces}
+                      {...props}
+                      key={index}
+                    />
+                  ))}
+                  <CartCardFooter fetchFinalPrice={fetchFinalPrice} />
+                </Card>
+              ) : null}
+            </>
+          )}
         </>
       ) : null}
     </div>
