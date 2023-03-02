@@ -37,7 +37,7 @@ function Cart() {
           fetchCategories.isError &&
           fetchMarketplaces.isError ? (
             <Card className={style.cartError}>
-              <Card.Title>Произошла ошибка, попробуйте позже.</Card.Title>
+              <Card.Text>Произошла ошибка, попробуйте позже.</Card.Text>
             </Card>
           ) : (
             <>
