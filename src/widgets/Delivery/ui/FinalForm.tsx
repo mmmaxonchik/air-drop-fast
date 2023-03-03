@@ -99,6 +99,8 @@ const ModalInformation = (props: any) => {
   )
 }
 
+
+
 function FinalForm({ step, fetchDeliveryTypes, postNewOrder }: FinalFormProps) {
   //hook-form
   const {
@@ -204,369 +206,379 @@ function FinalForm({ step, fetchDeliveryTypes, postNewOrder }: FinalFormProps) {
     }
   }
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      {step === CheckoutStatuses.PersonalInfo ? (
-        <>
-          <Form.Group className="mt-2">
-            <FloatingLabel label={"Имя"}>
-              <Form.Control
-                type="text"
-                placeholder="Имя"
-                maxLength={100}
-                isInvalid={typeof errors.Name !== "undefined" ? true : false}
-                required
-                {...register("Name", {
-                  maxLength: {
-                    value: 100,
-                    message: "Имя может иметь от 1 до 100 символов",
-                  },
-                  required: "Укажите имя",
-                })}
-              />
-              <Form.Control.Feedback type="invalid">
-                {typeof errors.Name !== "undefined"
-                  ? errors.Name.message
-                  : null}
-              </Form.Control.Feedback>
-            </FloatingLabel>
-          </Form.Group>
-          <Form.Group className="mt-2">
-            <FloatingLabel label={"Фамилия"}>
-              <Form.Control
-                type="text"
-                placeholder="Фамилия"
-                maxLength={100}
-                isInvalid={typeof errors.Surname !== "undefined" ? true : false}
-                required
-                {...register("Surname", {
-                  maxLength: {
-                    value: 100,
-                    message: "Фамилия может иметь от 1 до 100 символов",
-                  },
-                  required: "Укажите фамилию",
-                })}
-              />
-              <Form.Control.Feedback type="invalid">
-                {typeof errors.Surname !== "undefined"
-                  ? errors.Surname.message
-                  : null}
-              </Form.Control.Feedback>
-            </FloatingLabel>
-          </Form.Group>
-          <Form.Group className="mt-2">
-            <FloatingLabel label={"Номер телефона"}>
-              <Form.Control
-                inputMode="tel"
-                type="tel"
-                placeholder="Номер телефона"
-                isInvalid={
-                  typeof errors.PhoneNumber !== "undefined" ? true : false
-                }
-                required
-                {...register("PhoneNumber", {
-                  pattern: {
-                    value: /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/,
-                    message: "Введите номер телефона в +7 9** ** **",
-                  },
-                  required: "Укажите номер телефона",
-                })}
-              />
-              <Form.Control.Feedback type="invalid">
-                {typeof errors.PhoneNumber !== "undefined"
-                  ? errors.PhoneNumber.message
-                  : null}
-              </Form.Control.Feedback>
-            </FloatingLabel>
-          </Form.Group>
-          <Form.Group className="mt-2">
-            <FloatingLabel label={"Почта"}>
-              <Form.Control
-                inputMode="email"
-                type="email"
-                placeholder="Почта"
-                isInvalid={typeof errors.Email !== "undefined" ? true : false}
-                required
-                {...register("Email", {
-                  pattern: {
-                    value:
-                      /^((([0-9A-Za-z]{1}[-0-9A-z\.]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я\.]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/u,
-                    message: "Введите почту в формате example@email.com",
-                  },
-                  required: "Укажите почту",
-                })}
-              />
-              <Form.Control.Feedback type="invalid">
-                {typeof errors.Email !== "undefined"
-                  ? errors.Email.message
-                  : null}
-              </Form.Control.Feedback>
-            </FloatingLabel>
-          </Form.Group>
-          <Form.Group className="mt-2">
-            <FloatingLabel label={"Телеграм"}>
-              <Form.Control
-                type="text"
-                placeholder="Телеграм"
-                maxLength={33}
-                isInvalid={
-                  typeof errors.Telegram !== "undefined" ? true : false
-                }
-                required
-                {...register("Telegram", {
-                  pattern: {
-                    value: /[@].{1,}/,
-                    message: "Введите имя пользователя в формате @example",
-                  },
-                  minLength: {
-                    value: 2,
-                    message: "Имя пользователя может иметь от 2 до 32 символов",
-                  },
-                  maxLength: {
-                    value: 33,
-                    message: "Имя пользователя может иметь от 2 до 33 символов",
-                  },
-                  required: "Укажите имя пользователя",
-                })}
-              />
-              <Form.Control.Feedback type="invalid">
-                {typeof errors.Telegram !== "undefined"
-                  ? errors.Telegram.message
-                  : null}
-              </Form.Control.Feedback>
-            </FloatingLabel>
-          </Form.Group>
-          <div className="mt-2 d-grid gap-2 mt-2">
-            <Button variant="dark" type="submit">
-              Продолжить
-            </Button>
-            <Button
-              variant="dark"
-              onClick={() => prevStep(CheckoutStatuses.PersonalInfo)}
-            >
-              Назад
-            </Button>
-          </div>
-        </>
-      ) : null}
-      {step === CheckoutStatuses.DeliveryInfo ? (
-        <>
-          {fetchDeliveryTypes.isLoading ? (
-            <InputLoader />
-          ) : (
-            <FloatingLabel label={"Способы получения"} className={"mt-2"}>
-              <Form.Select
-                aria-label={"Способы получения"}
-                defaultValue={0}
-                {...register("DeliveryTypeId")}
-                onChange={selectDeliveryTypeNew}
+    <>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        {step === CheckoutStatuses.PersonalInfo ? (
+          <>
+            <Form.Group className="mt-2">
+              <FloatingLabel label={"Имя"}>
+                <Form.Control
+                  type="text"
+                  placeholder="Имя"
+                  maxLength={100}
+                  isInvalid={typeof errors.Name !== "undefined" ? true : false}
+                  required
+                  {...register("Name", {
+                    maxLength: {
+                      value: 100,
+                      message: "Имя может иметь от 1 до 100 символов",
+                    },
+                    required: "Укажите имя",
+                  })}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {typeof errors.Name !== "undefined"
+                    ? errors.Name.message
+                    : null}
+                </Form.Control.Feedback>
+              </FloatingLabel>
+            </Form.Group>
+            <Form.Group className="mt-2">
+              <FloatingLabel label={"Фамилия"}>
+                <Form.Control
+                  type="text"
+                  placeholder="Фамилия"
+                  maxLength={100}
+                  isInvalid={
+                    typeof errors.Surname !== "undefined" ? true : false
+                  }
+                  required
+                  {...register("Surname", {
+                    maxLength: {
+                      value: 100,
+                      message: "Фамилия может иметь от 1 до 100 символов",
+                    },
+                    required: "Укажите фамилию",
+                  })}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {typeof errors.Surname !== "undefined"
+                    ? errors.Surname.message
+                    : null}
+                </Form.Control.Feedback>
+              </FloatingLabel>
+            </Form.Group>
+            <Form.Group className="mt-2">
+              <FloatingLabel label={"Номер телефона"}>
+                <Form.Control
+                  inputMode="tel"
+                  type="tel"
+                  placeholder="Номер телефона"
+                  isInvalid={
+                    typeof errors.PhoneNumber !== "undefined" ? true : false
+                  }
+                  required
+                  {...register("PhoneNumber", {
+                    pattern: {
+                      value: /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/,
+                      message: "Введите номер телефона в +7 9** ** **",
+                    },
+                    required: "Укажите номер телефона",
+                  })}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {typeof errors.PhoneNumber !== "undefined"
+                    ? errors.PhoneNumber.message
+                    : null}
+                </Form.Control.Feedback>
+              </FloatingLabel>
+            </Form.Group>
+            <Form.Group className="mt-2">
+              <FloatingLabel label={"Почта"}>
+                <Form.Control
+                  inputMode="email"
+                  type="email"
+                  placeholder="Почта"
+                  isInvalid={typeof errors.Email !== "undefined" ? true : false}
+                  required
+                  {...register("Email", {
+                    pattern: {
+                      value:
+                        /^((([0-9A-Za-z]{1}[-0-9A-z\.]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я\.]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/u,
+                      message: "Введите почту в формате example@email.com",
+                    },
+                    required: "Укажите почту",
+                  })}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {typeof errors.Email !== "undefined"
+                    ? errors.Email.message
+                    : null}
+                </Form.Control.Feedback>
+              </FloatingLabel>
+            </Form.Group>
+            <Form.Group className="mt-2">
+              <FloatingLabel label={"Телеграм"}>
+                <Form.Control
+                  type="text"
+                  placeholder="Телеграм"
+                  maxLength={33}
+                  isInvalid={
+                    typeof errors.Telegram !== "undefined" ? true : false
+                  }
+                  required
+                  {...register("Telegram", {
+                    pattern: {
+                      value: /[@].{1,}/,
+                      message: "Введите имя пользователя в формате @example",
+                    },
+                    minLength: {
+                      value: 2,
+                      message:
+                        "Имя пользователя может иметь от 2 до 32 символов",
+                    },
+                    maxLength: {
+                      value: 33,
+                      message:
+                        "Имя пользователя может иметь от 2 до 33 символов",
+                    },
+                    required: "Укажите имя пользователя",
+                  })}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {typeof errors.Telegram !== "undefined"
+                    ? errors.Telegram.message
+                    : null}
+                </Form.Control.Feedback>
+              </FloatingLabel>
+            </Form.Group>
+            <div className="mt-2 d-grid gap-2 mt-2">
+              <Button variant="dark" type="submit">
+                Продолжить
+              </Button>
+              <Button
+                variant="dark"
+                onClick={() => prevStep(CheckoutStatuses.PersonalInfo)}
               >
-                <option value={0}>{"Выберете способ получения"}</option>
-                {fetchDeliveryTypes.data?.map(({ Name, Id }) => (
-                  <option value={Id} key={Id}>
-                    {Name}
-                  </option>
-                ))}
-              </Form.Select>
-            </FloatingLabel>
-          )}
+                Назад
+              </Button>
+            </div>
+          </>
+        ) : null}
+        {step === CheckoutStatuses.DeliveryInfo ? (
+          <>
+            {fetchDeliveryTypes.isLoading ? (
+              <InputLoader />
+            ) : (
+              <FloatingLabel label={"Способы получения"} className={"mt-2"}>
+                <Form.Select
+                  aria-label={"Способы получения"}
+                  defaultValue={0}
+                  {...register("DeliveryTypeId")}
+                  onChange={selectDeliveryTypeNew}
+                >
+                  <option value={0}>{"Выберете способ получения"}</option>
+                  {fetchDeliveryTypes.data?.map(({ Name, Id }) => (
+                    <option value={Id} key={Id}>
+                      {Name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </FloatingLabel>
+            )}
 
-          {deliveryTypeNew === pickup ? (
-            <FloatingLabel label={"Пункты выдачи"} className={"mt-2"}>
-              <Form.Select aria-label={"Пункты выдачи"} {...register("Pickup")}>
-                {[
-                  "Выберете пункт выдачи",
-                  "Москва, метро Новаторская",
-                  "Москва, метро Рязанский Проспект",
-                ].map((value, index) => (
-                  <option
-                    key={index}
-                    value={value === "Выберете пункт выдачи" ? "" : value}
-                  >
-                    {value}
-                  </option>
-                ))}
-              </Form.Select>
-            </FloatingLabel>
-          ) : null}
+            {deliveryTypeNew === pickup ? (
+              <FloatingLabel label={"Пункты выдачи"} className={"mt-2"}>
+                <Form.Select
+                  aria-label={"Пункты выдачи"}
+                  {...register("Pickup")}
+                >
+                  {[
+                    "Выберете пункт выдачи",
+                    "Москва, метро Новаторская",
+                    "Москва, метро Рязанский Проспект",
+                  ].map((value, index) => (
+                    <option
+                      key={index}
+                      value={value === "Выберете пункт выдачи" ? "" : value}
+                    >
+                      {value}
+                    </option>
+                  ))}
+                </Form.Select>
+              </FloatingLabel>
+            ) : null}
 
-          {deliveryTypeNew !== pickup && deliveryTypeNew !== 0 ? (
-            <>
-              <Form.Group className="mt-2">
-                <FloatingLabel label={"Регион"}>
-                  <Form.Control
-                    type="text"
-                    placeholder="Регион"
-                    maxLength={100}
-                    isInvalid={
-                      typeof errors.Region !== "undefined" ? true : false
-                    }
-                    required
-                    {...register("Region", {
-                      maxLength: {
-                        value: 100,
-                        message: "Регион может иметь от 1 до 100 символов",
-                      },
-                      required: "Укажите регион",
-                    })}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {typeof errors.Region !== "undefined"
-                      ? errors.Region.message
-                      : null}
-                  </Form.Control.Feedback>
-                </FloatingLabel>
-              </Form.Group>
-              <Form.Group className="mt-2">
-                <FloatingLabel label={"Город"}>
-                  <Form.Control
-                    type="text"
-                    placeholder="Город"
-                    maxLength={100}
-                    isInvalid={
-                      typeof errors.City !== "undefined" ? true : false
-                    }
-                    required
-                    {...register("City", {
-                      maxLength: {
-                        value: 100,
-                        message: "Город может иметь от 1 до 100 символов",
-                      },
-                      required: "Укажите регион",
-                    })}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {typeof errors.City !== "undefined"
-                      ? errors.City.message
-                      : null}
-                  </Form.Control.Feedback>
-                </FloatingLabel>
-              </Form.Group>
-              <Form.Group className="mt-2">
-                <FloatingLabel label={"Улица"}>
-                  <Form.Control
-                    type="text"
-                    placeholder="Улица"
-                    maxLength={100}
-                    isInvalid={
-                      typeof errors.Street !== "undefined" ? true : false
-                    }
-                    required
-                    {...register("Street", {
-                      maxLength: {
-                        value: 100,
-                        message: "Улица может иметь от 1 до 100 символов",
-                      },
-                      required: "Укажите улицу",
-                    })}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {typeof errors.Street !== "undefined"
-                      ? errors.Street.message
-                      : null}
-                  </Form.Control.Feedback>
-                </FloatingLabel>
-              </Form.Group>
-              <Form.Group className="mt-2">
-                <FloatingLabel label={"Номер дома/строения"}>
-                  <Form.Control
-                    type="text"
-                    placeholder="Номер дома/строения"
-                    maxLength={100}
-                    isInvalid={
-                      typeof errors.HouseNumber !== "undefined" ? true : false
-                    }
-                    required
-                    {...register("HouseNumber", {
-                      maxLength: {
-                        value: 100,
-                        message: "Номер дома может иметь от 1 до 100 символов",
-                      },
-                      required: "Укажите номер дома/строения",
-                    })}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {typeof errors.HouseNumber !== "undefined"
-                      ? errors.HouseNumber.message
-                      : null}
-                  </Form.Control.Feedback>
-                </FloatingLabel>
-              </Form.Group>
-              {deliveryTypeNew === russia_post ? (
+            {deliveryTypeNew !== pickup && deliveryTypeNew !== 0 ? (
+              <>
                 <Form.Group className="mt-2">
-                  <FloatingLabel label={"Почтовый индекс"}>
+                  <FloatingLabel label={"Регион"}>
                     <Form.Control
                       type="text"
-                      placeholder="Почтовый индекс"
+                      placeholder="Регион"
                       maxLength={100}
                       isInvalid={
-                        typeof errors.PostIndex !== "undefined" ? true : false
+                        typeof errors.Region !== "undefined" ? true : false
                       }
                       required
-                      {...register("PostIndex", {
+                      {...register("Region", {
                         maxLength: {
                           value: 100,
-                          message:
-                            "Почтовый индекс может иметь от 1 до 100 символов",
+                          message: "Регион может иметь от 1 до 100 символов",
                         },
-                        required: "Укажите почтовый индекс",
+                        required: "Укажите регион",
                       })}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {typeof errors.PostIndex !== "undefined"
-                        ? errors.PostIndex.message
+                      {typeof errors.Region !== "undefined"
+                        ? errors.Region.message
                         : null}
                     </Form.Control.Feedback>
                   </FloatingLabel>
                 </Form.Group>
-              ) : null}
-            </>
-          ) : null}
+                <Form.Group className="mt-2">
+                  <FloatingLabel label={"Город"}>
+                    <Form.Control
+                      type="text"
+                      placeholder="Город"
+                      maxLength={100}
+                      isInvalid={
+                        typeof errors.City !== "undefined" ? true : false
+                      }
+                      required
+                      {...register("City", {
+                        maxLength: {
+                          value: 100,
+                          message: "Город может иметь от 1 до 100 символов",
+                        },
+                        required: "Укажите регион",
+                      })}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {typeof errors.City !== "undefined"
+                        ? errors.City.message
+                        : null}
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+                </Form.Group>
+                <Form.Group className="mt-2">
+                  <FloatingLabel label={"Улица"}>
+                    <Form.Control
+                      type="text"
+                      placeholder="Улица"
+                      maxLength={100}
+                      isInvalid={
+                        typeof errors.Street !== "undefined" ? true : false
+                      }
+                      required
+                      {...register("Street", {
+                        maxLength: {
+                          value: 100,
+                          message: "Улица может иметь от 1 до 100 символов",
+                        },
+                        required: "Укажите улицу",
+                      })}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {typeof errors.Street !== "undefined"
+                        ? errors.Street.message
+                        : null}
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+                </Form.Group>
+                <Form.Group className="mt-2">
+                  <FloatingLabel label={"Номер дома/строения"}>
+                    <Form.Control
+                      type="text"
+                      placeholder="Номер дома/строения"
+                      maxLength={100}
+                      isInvalid={
+                        typeof errors.HouseNumber !== "undefined" ? true : false
+                      }
+                      required
+                      {...register("HouseNumber", {
+                        maxLength: {
+                          value: 100,
+                          message:
+                            "Номер дома может иметь от 1 до 100 символов",
+                        },
+                        required: "Укажите номер дома/строения",
+                      })}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {typeof errors.HouseNumber !== "undefined"
+                        ? errors.HouseNumber.message
+                        : null}
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+                </Form.Group>
+                {deliveryTypeNew === russia_post ? (
+                  <Form.Group className="mt-2">
+                    <FloatingLabel label={"Почтовый индекс"}>
+                      <Form.Control
+                        type="text"
+                        placeholder="Почтовый индекс"
+                        maxLength={100}
+                        isInvalid={
+                          typeof errors.PostIndex !== "undefined" ? true : false
+                        }
+                        required
+                        {...register("PostIndex", {
+                          maxLength: {
+                            value: 100,
+                            message:
+                              "Почтовый индекс может иметь от 1 до 100 символов",
+                          },
+                          required: "Укажите почтовый индекс",
+                        })}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {typeof errors.PostIndex !== "undefined"
+                          ? errors.PostIndex.message
+                          : null}
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Form.Group>
+                ) : null}
+              </>
+            ) : null}
 
-          <Form.Group className="mt-3">
-            <Form.Label>Пожелания к заказу</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={2}
-              maxLength={254}
-              placeholder="Если у вас есть пожелания к заказу, напишите их здесь."
-              {...register("Comment", { maxLength: 254 })}
+            <Form.Group className="mt-3">
+              <Form.Label>Пожелания к заказу</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={2}
+                maxLength={254}
+                placeholder="Если у вас есть пожелания к заказу, напишите их здесь."
+                {...register("Comment", { maxLength: 254 })}
+              />
+            </Form.Group>
+
+            <Form.Check
+              className="mt-2"
+              type="checkbox"
+              label={
+                <Link to="" onClick={() => setModalInfoShow(true)}>
+                  Нажимая кнопку «Оформить заказ», я даю свое согласие на
+                  обработку моих персональных данных, в соответствии с
+                  Федеральным законом от 27.07.2006 года №152-ФЗ «О персональных
+                  данных», на условиях и для целей, определенных в Согласии на
+                  обработку персональных данных.
+                </Link>
+              }
+              onChange={() => setConfirmation(!confirmation)}
+              checked={confirmation}
             />
-          </Form.Group>
+            <ModalInformation
+              show={modalInfoShow}
+              onHide={() => setModalInfoShow(false)}
+            />
 
-          <Form.Check
-            className="mt-2"
-            type="checkbox"
-            label={
-              <Link to="" onClick={() => setModalInfoShow(true)}>
-                Нажимая кнопку «Оформить заказ», я даю свое согласие на
-                обработку моих персональных данных, в соответствии с Федеральным
-                законом от 27.07.2006 года №152-ФЗ «О персональных данных», на
-                условиях и для целей, определенных в Согласии на обработку
-                персональных данных.
-              </Link>
-            }
-            onChange={() => setConfirmation(!confirmation)}
-            checked={confirmation}
-          />
-          <ModalInformation
-            show={modalInfoShow}
-            onHide={() => setModalInfoShow(false)}
-          />
-
-          <div className="mt-2 d-grid gap-2 mt-2">
-            <Button variant="dark" type="submit">
-              Оформить заказ
-            </Button>
-            <Button
-              variant="dark"
-              onClick={() => prevStep(CheckoutStatuses.DeliveryInfo)}
-            >
-              Назад
-            </Button>
-          </div>
-        </>
-      ) : null}
-    </Form>
+            <div className="mt-2 d-grid gap-2 mt-2">
+              <Button variant="dark" type="submit">
+                Оформить заказ
+              </Button>
+              <Button
+                variant="dark"
+                onClick={() => prevStep(CheckoutStatuses.DeliveryInfo)}
+              >
+                Назад
+              </Button>
+            </div>
+          </>
+        ) : null}
+      </Form>
+    </>
   )
 }
 

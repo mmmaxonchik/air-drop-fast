@@ -1,6 +1,6 @@
 import React from "react"
 import { Route, Routes } from "react-router-dom"
-import { Loading } from "../../../../shared/Loading"
+import { Loading } from "../../../../shared/LoadingPage"
 import { routeConfig } from "../config/routeConfig"
 
 function AppRouter() {

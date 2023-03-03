@@ -6,7 +6,7 @@ import { setCookie } from "../../../app/cookies/setCookie"
 //UI
 import { Cart } from "../../../widgets/Cart"
 import { DeliveryForm } from "../../../widgets/Delivery"
-import { OrderStatus } from "../../../widgets/OrderStatus"
+
 import Progress from "../../../widgets/Delivery/ui/Progress"
 //Types
 import type { Item, Order } from "../types"
@@ -65,7 +65,6 @@ function DeliveryPage() {
             <Progress />
             <DeliveryForm />
             <Cart />
-            <OrderStatus />
           </Card>
         </div>
       </OrderCreateContext.Provider>

@@ -1,0 +1,11 @@
+.loadingOrder{
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .loading{
+    height: 60px;
+    width: 60px;
+  }
+}

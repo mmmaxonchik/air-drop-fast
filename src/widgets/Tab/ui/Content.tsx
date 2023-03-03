@@ -1,40 +1,12 @@
 import { memo } from "react"
-import { Col, Tab, Accordion, Card } from "react-bootstrap"
-import style from "./tab.module.scss"
+import { Col, Tab, Card } from "react-bootstrap"
 import { InfoTabsEnum } from "./Tab"
-
-const AboutUs = memo(() => {
-  return (
-    <Accordion defaultActiveKey="0" className={style.accordion}>
-      <Accordion.Item eventKey="0">
-        <Accordion.Header>Чем мы занимаемся?</Accordion.Header>
-        <Accordion.Body>
-          Наш сервис предоставляет услуги доставки и выкупом вещей из Китая. С
-          помощью нас вы можете сделать заказ в Китае с таких площадок как
-          Poizon, Nice, 95, Taobao и др. Мы предоставляем Авиатранспортный вид
-          доставки на данный момент это является самый быстрый и безопасный
-          способ доставки . Мы старается предоставить вам самые быстрые сроки
-          доставки, а так же приятный вам курс. Cо временем сервис будет
-          усовершенствован с целью более удобного и быстрого оформления заказа.
-        </Accordion.Body>
-      </Accordion.Item>
-      <Accordion.Item eventKey="1">
-        <Accordion.Header>Почему именно мы?</Accordion.Header>
-        <Accordion.Body>
-          Мы старается предоставить вам самые быстрые сроки доставки, а так же
-          приятный вам курс. Cо временем сервис будет усовершенствован с целью
-          более удобного и быстрого оформления заказа.
-        </Accordion.Body>
-      </Accordion.Item>
-    </Accordion>
-  )
-})
 
 const AboutUs1 = memo(() => {
   return (
     <div>
       <h1>О нас</h1>
-      <h5>Самовывоз</h5>
+      <h5>Чем мы занимаемся?</h5>
       <p>
         Наш сервис предоставляет услуги доставки и выкупом вещей из Китая. С
         помощью нас вы можете сделать заказ в Китае с таких площадок как Poizon,

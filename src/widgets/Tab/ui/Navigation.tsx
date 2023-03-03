@@ -1,5 +1,5 @@
 import { useEffect, memo, useState } from "react"
-import { Dropdown, NavDropdown } from "react-bootstrap"
+import { NavDropdown } from "react-bootstrap"
 import Col from "react-bootstrap/Col"
 import Nav from "react-bootstrap/Nav"
 import style from "./tab.module.scss"

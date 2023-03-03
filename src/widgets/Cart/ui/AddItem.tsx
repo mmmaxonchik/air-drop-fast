@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext, memo } from "react"
+import { ChangeEvent, useContext } from "react"
 import { useForm, useWatch } from "react-hook-form"
 import {
   FloatingLabel,
@@ -52,10 +52,6 @@ interface AddItemProps {
   fetchCategories: UseQueryResult<Category[]>
   fetchMarketplaces: UseQueryResult<Marketplace[]>
 }
-
-const ErrorAddItem = memo(() => {
-  return <></>
-})
 
 export default function AddItem({
   fetchRates,
